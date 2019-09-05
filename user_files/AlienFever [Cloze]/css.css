@@ -1,0 +1,57 @@
+/* Profile: AlienFever [Cloze] || Satus: Saved */ 
+
+html { overflow: scroll; overflow-x: hidden; }
+/* CONTAINER FOR YOUR CARDS */ 
+#kard {
+    padding: 0px 0px;
+max-width: 1000px;
+    margin: 0 auto; /* CENTERS THE CARD IN THE MIDDLE OF THE WINDOW */
+    word-wrap: break-word; /* BREAKS UP LONG WORKS */
+}
+
+/* APPLIES TO THE WHOLE CARD */
+.card {
+    font-family: Menlo, baskerville, sans;
+padding: 35px 0px;
+max-width: 1000px;
+margin: 0 auto;
+    font-size: 29px; /* FONT SIZE */
+    text-align: center; /* ALIGN TEXT */
+    color: #D7DEE9; /* FONT COLOR #bdc6c7; #D7DEE9;*/
+    line-height: 1.6em;
+    background-color: #002b36; /* BACKGROUND COLOR */
+}
+/* STYLE FOR CLOZE DELETIONS */
+.cloze, .cloze b, .cloze u, .cloze i { font-weight: bold; color: #2699d2 !important; background-color:#073642;}
+
+/* STYLE FOR EXTRA PORTION ON BACK OF CARD  color: #bdc6c7;*/
+#extra, #extra i { font-size: 22px;      }
+
+/* STYLE TAGS TO APPEAR WHEN HOVERING OVER TOP OF CARD */
+.tags { 
+    color: #A6ABB9;
+    opacity: 0;
+    font-size: 10px; 
+    width: 100%;
+    text-align: center;
+    text-transform: uppercase; 
+    position: fixed; 
+    padding: 0; 
+    top:0;  
+    right: 0;}
+.tags:hover { opacity: 1; position: fixed;}
+
+/* IMAGE STYLE */
+img { display: block; max-width: 100%; max-height: 80vh; margin-left: auto; margin: 10px auto 10px auto;}
+img:active { width: 100%; }
+tr {font-size: 12px; }
+
+/* COLOR ACCENTS FOR BOLD-ITALICS-UNDERLINE */
+b { color:#C695C6  !important; } /* BOLD STYLE C695C6 */
+u {color: #F08080; text-decoration: none;} /* #2aa198 UNDERLINE STYLE 5EB3B3  text-decoration: none;  */
+i  { color:#5eb397; } /* ITALICS STYLE IndianRed */
+a { color: LightGray !important; text-decoration: none; font-size: 10px; font-style: normal; } /* LINK STYLE */
+
+/* ADJUSTMENT FOR MOBILE DEVICES */
+.mobile .tags:hover { opacity: 1; position: relative;}
+.mobile .card img:active { width: inherit; max-height: none;}

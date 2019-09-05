@@ -1,0 +1,2 @@
+{{cloze:Text}}<hr>
+<div class=mystyle1>{{Extra}}</div>

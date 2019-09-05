@@ -1,0 +1,40 @@
+<div class=noteid>{{Note ID}}</div>
+<hr>
+<br>
+<div class=text>{{cloze:Text}}</div>
+<br>
+<br>
+<hr>
+  
+{{#First Aid}}
+ <a class=hint href="#"onclick="this.style.display='none';document.getElementById('hint1').style.display='inline-block';return false";> <font color="#A00000">First Aid</a></font><div id="hint1" class=hint style="display: none">{{First Aid}}</div>
+{{/First Aid}}
+
+{{#Netters}}
+<a class=hint href="#"onclick="this.style.display='none';document.getElementById('hint2').style.display='';return false";> <font color="#0000CC">Netters</a></font><div id="hint2" class=hint style="display: none">{{Netters}}</div>
+{{/Netters}}
+
+{{#Robbins}}
+<a class=hint href="#"onclick="this.style.display='none';document.getElementById('hint3').style.display='';return false";> <font color="#008800">Robbins</a></font><div id="hint3" class=hint style="display: none">{{Robbins}}</div>
+{{/Robbins}}
+
+{{#Atlas}}
+<a class=hint href="#"onclick="this.style.display='none';document.getElementById('hint4').style.display='';return false";> <font color="#996600">Atlas</a></font><div id="hint4" class=hint style="display: none">{{Atlas}}</div>
+{{/Atlas}}
+
+{{#Step Up to Medicine}}
+<a class=hint href="#"onclick="this.style.display='none';document.getElementById('hint5').style.display='';return false";> <font color="#660033">SUTM</a></font><div id="hint5" class=hint style="display: none">{{Step Up to Medicine}}</div>
+{{/Step Up to Medicine}}
+
+{{#UWorld}}
+ <a class=hint href="#"onclick="this.style.display='none';document.getElementById('hint7').style.display='inline-block';return false";> <font color="#1144ff">UWorld</a></font><div id="hint7" class=hint style="display: none">{{UWorld}}</div>
+{{/UWorld}}
+
+{{#Other Reference}}
+<a class=hint href="#"onclick="this.style.display='none';document.getElementById('hint6').style.display='';return false";> <font color="#9900CC">Other</a></font><div id="hint6" class=hint style="display: none">{{Other Reference}}</div>
+{{/Other Reference}}
+
+<hr>
+<br>
+<div class=extra>{{Extra}}</div>
+

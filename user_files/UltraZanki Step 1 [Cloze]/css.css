@@ -1,0 +1,93 @@
+/* Profile: UltraZanki Step 1 [C] || Satus: Saved */ 
+
+.card {
+	font-family: "Open Sans", Arial;
+	font-size: 18px;
+	color: white;
+        text-align:left;
+	background-color: black;
+
+}
+
+.text {
+  display: inline-block;
+  align: left;
+  text-align: left;
+max-width: 35em;
+
+}
+
+
+hr { 
+        border: 1px solid;
+	border-color: #c0c0c0;
+	margin-top: 0em ;
+        margin-bottom: 1em ;
+
+}
+
+
+.cloze {
+	font-weight: bold;
+	color: #88AAEE;
+	font-size: 20px
+
+}
+
+
+.extra {
+	font-size: 100%;
+        font-family: "Open Sans", Arial;
+	color: #88AAEE;
+
+}
+
+
+.card img {max-width: 100%; max-height: none;}
+
+.noteid {
+	color: #808080;
+	font-size: 90%;
+	text-align: center;
+        text-transform: ;
+	position:;
+        font-family: "Open Sans", Arial;
+	bottom:22px;
+	left:20px;}
+
+
+.noteid2 {
+	color: black;
+	font-size: 90%;
+	text-align: center;
+        text-transform: ;
+	position:;
+        font-family: "Open Sans", Arial;
+	bottom:22px;
+	left:20px;}
+
+.noteid:hover {
+	color: white;
+	cursor: default;}
+
+.noteid2:hover {
+	color: white;
+	cursor: default;}
+
+hr { 
+        border: 1px solid;
+	border-color: #808080;
+	margin: 0;
+}
+
+
+a {
+      
+        text-decoration: inherit;
+        font-family: "Open Sans", Arial;;
+        font-size: 18px; 
+        font-style: normal !important;
+        font-weight: bold !important;
+}
+
+

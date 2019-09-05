@@ -1,0 +1,16 @@
+/* Profile: Zanki Original [C] || Satus: Saved */ 
+
+.card {
+    font-family: times new roman;
+    font-size: 18px;
+    text-align: center;
+    color: black;
+    background-color: lavender
+;
+}
+
+.cloze {
+    font-weight: bold;
+    color: blue;
+}
+

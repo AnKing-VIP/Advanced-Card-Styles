@@ -1,0 +1,43 @@
+/* Profile: Justachio's Dark [C] || Satus: Saved */ 
+
+html { overflow: scroll; overflow-x: hidden; }
+/* CONTAINER FOR YOUR CARDS */
+#kard {
+	padding: 0px 0px;
+	max-width: 700px; /* CHANGE CARD SIZE HERE */
+	margin: 0 auto; /* CENTERS THE CARD IN THE MIDDLE OF THE WINDOW */
+	word-wrap: break-word; /* BREAKS UP LONG WORKS */
+}
+
+/* APPLIES TO THE WHOLE CARD */
+.card {
+	font-family: Helvetica;
+	font-size: 24px;
+	text-align: center;
+	color: #C6C6C6;
+	line-height: 1.6em;
+	background-color: #212121;
+}
+
+/* APPLIES TO HYPERLINKS */
+a {
+	color: #64B5F6;
+}
+
+/* STYLE FOR EXTRA PORTION ON BACK OF CARD */
+#extra, #extra i { font-size: 16px; color:#C6C6C6; font-style: italic; }
+
+/* STYLE FOR CLOZE DELETIONS */
+.cloze, .cloze b, .cloze u, .cloze i { font-weight: bold; color: #81C784 !important; }
+
+/* COLOR ACCENTS FOR BOLD AND STRONG*/
+b { color: #E0E0E0 !important; }
+strong { color: #E0E0E0 !important; }
+
+/* IMAGE STYLE */
+img { display: block; max-width: 100%; max-height: none; margin-left: auto; margin: 10px auto 10px auto; }
+img:active { width: 100%; }
+tr { font-size: 12px; }
+
+/* ADJUSTMENT FOR MOBILE DEVICES */
+.mobile .card img:active { width: inherit; max-height: none; }

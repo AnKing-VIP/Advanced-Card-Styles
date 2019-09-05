@@ -1,0 +1,4 @@
+<div class=noteid2>{{Note ID}}</div>
+<hr>
+<br>
+<div class=text>{{cloze:Text}}</div>

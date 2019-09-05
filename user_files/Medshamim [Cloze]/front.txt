@@ -1,0 +1,4 @@
+<div id="kard">
+<div class="tags">{{Tags}}</div>
+{{cloze:Text}}
+</div>

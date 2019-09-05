@@ -1,0 +1,9 @@
+<div id="kard">
+	{{cloze:Text}}
+	<div>
+		&nbsp;
+	</div>
+	<div id='extra'>
+		{{Extra}}
+	</div>
+</div>

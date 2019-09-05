@@ -1,0 +1,6 @@
+<div id="kard">
+    <div class="tags" id='tags'>{{Tags}}</div>
+    {{cloze:Text}}
+    <div>&nbsp;</div>
+    <div id='extra'>{{Extra}}</div>
+</div>

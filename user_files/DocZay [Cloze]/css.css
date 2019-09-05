@@ -1,0 +1,41 @@
+/* Profile: DocZay [Cloze] || Satus: Saved */ 
+
+
+.card {
+    font-family: "times new roman";
+    font-size: 20px;
+    text-align: center;
+    color: black;
+    background-color: lavender;
+    max-width: 70%;
+    margin: 20px auto;
+}
+
+.cloze {
+    font-weight: bold;
+    color: blue;
+}
+
+.night_mode .cloze {
+    color: #0099ff;
+}
+
+.mystyle1 {
+    font-size: 16px;
+    font-style: italic;
+    color: darkgreen
+;
+}
+
+.night_mode .mystyle1 {
+    font-size: 16px;
+    font-style: italic;
+    color: #33cc33
+
+
+
+
+
+
+;
+}
