@@ -122,7 +122,7 @@ def convertRootlistToCssStr(rootList):
             masterStr = masterStr + "\n" + "}\n"
             # masterStr = masterStr[:len(masterStr) - 2] + "\n" + "}"
 
-            pass
+            
         # This next part cleans the string so that there is only one empty line between classes.
         else:
             # masterStr = masterStr + serialize([item])

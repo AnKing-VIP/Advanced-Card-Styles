@@ -43,7 +43,7 @@ def saveProfile(profileName, cssText, frontText=None, backText=None):
     if backText is not None:
         with open(backFile, 'w+') as savefile:
             savefile.write(backText)
-    pass
+    
 
 
 def exportProfile(profileComboBox, includeAllCBox):
@@ -62,7 +62,7 @@ def exportProfile(profileComboBox, includeAllCBox):
                     # zip the file
                     if includeAllCBox.isChecked():
                         zipped.write(file)
-                    pass
+                    
                 else:
                     zipped.write(file)
 
@@ -87,12 +87,13 @@ def importProfile():
     else:
         return None
 
-    pass
+    
 
 
 class ProfileFolder():
     """ProfileFolder"""
 
     def __init__(self, arg):
-
         pass
+
+        

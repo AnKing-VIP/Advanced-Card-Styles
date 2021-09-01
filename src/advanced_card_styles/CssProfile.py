@@ -36,7 +36,7 @@ class CssProfile():
         self.name = 'NOT YET INITIALIZED'
         self.rootList = []
         self.ruleNamesList = []
-        pass
+        
 
     # Initializing functions :
 
@@ -45,7 +45,7 @@ class CssProfile():
         self.__createRuleNamesList()
         self.name = Path(filePath).name.split('.')[0]
         self.initialized = True
-        pass
+        
 
     def initializeFromCssString(self, cssString, profileName):
         self.rootList = createRootListFromCssString(cssString)
@@ -53,7 +53,7 @@ class CssProfile():
         self.__createRuleNamesList()
         self.name = profileName
         self.initialized = True
-        pass
+        
 
 
     # Changing stuff functions :
@@ -92,7 +92,7 @@ class CssProfile():
                     break
                 else:
                     continue
-            pass
+            
 
         if index != None:
             if newOrderedDict != None:
@@ -102,7 +102,7 @@ class CssProfile():
         else:
             if newOrderedDict != None:
                 self.rootList.append((ruleName, newOrderedDict))
-        pass
+        
 
     # Accessing functions :
 
@@ -122,4 +122,4 @@ class CssProfile():
         self.newCssString = convertRootlistToCssStr(self.rootList)
         with open(filePath, 'w+') as saveFile:
             saveFile.write(self.newCssString)
-        pass
+        

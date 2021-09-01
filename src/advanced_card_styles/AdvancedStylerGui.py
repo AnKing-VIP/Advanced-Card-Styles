@@ -21,7 +21,7 @@ class ASGUI():
     # memoryBackedUpCssProfileText = clayout.memoryBackedUpCssProfileText = ''
     window = clayout.window = AdvancedStylerUI.Ui_Form()
     # cssBoxx = clayout.cssBoxx = QTextEdit()
-    # topCardLayout = QWidget()
+    # self.clayout = QWidget()
     some = clayout.some = QWidget()
 
 
@@ -32,7 +32,7 @@ class ASGUI():
         # someL.addWidget(some)
         # someL.addWidget(someB)
 
-        self.topCardLayout = parentUI
+        self.self.clayout = parentUI
 
         self.cardWidthButtonGroup = clayout.cardWidthButtonGroup = QButtonGroup()
         self.cardWidthButtonGroup.addButton(self.window.cardWidthPercetRadioButton)
@@ -56,7 +56,7 @@ class ASGUI():
         self.imgShadowButtonGroup.addButton(self.window.imgShadowDropRadioButton)
         self.imgShadowButtonGroup.addButton(self.window.imgShadowGlowRadioButton)
 
-        self.some.setWindowIcon(self.topCardLayout.windowIcon())
+        self.some.setWindowIcon(self.self.clayout.windowIcon())
 
         self.some.setWindowModality(Qt.ApplicationModal)
         self.some.show()
@@ -71,7 +71,7 @@ class ASGUI():
         self.unifiedUpdateAction()
 
         self.some.setFocus()
-        pass
+        
 
 
     def loadSettingsFromCss(self, filePath):
@@ -294,7 +294,7 @@ class ASGUI():
         for element in listOfElements:
             element.setEnabled(checkbox.isChecked())
 
-        pass
+        
 
 
     def connectButtonsAndTextboxes(self):
@@ -332,7 +332,7 @@ class ASGUI():
         self.window.enableLinks.stateChanged.connect(partial(self.disableElements, self.window.enableLinks, linksList))
 
 
-        pass
+        
 
 
     def unifiedUpdateAction(self):
@@ -357,7 +357,7 @@ class ASGUI():
         fontComboBox = self.some.findChild(QFontComboBox, 'fontComboBox')
         fontComboBox.currentFontChanged.connect(self.updateProfile)
 
-        pass
+        
 
     def makeRuleDictionnaryFromUI(self):
 
@@ -615,20 +615,20 @@ class ASGUI():
 
         self.cssBoxx.setText(cssTextWithConfigs)
 
-        pass
+        
 
 
     def undoAll(self):
         self.cssBoxx.setText(self.memoryBackedUpCssProfileText)
         self.loadSettingsFromCss(self.memoryBackedUpCssProfileText)
-        pass
+        
 
 
     def cancelButtonFunc(self):
 
         clayout.some.close()
 
-        pass
+        
 
     def insertorChangeConfigs(self, cssText, saveStatus):
         signalString = cssText[:11]
@@ -649,7 +649,7 @@ class ASGUI():
 
 
     def addExtraTag(self):
-        backBox = self.topCardLayout.findChild(QTextEdit, "back")
+        backBox = self.self.clayout.findChild(QTextEdit, "back")
         signalString = backBox.toPlainText()
         extraIndex = signalString.find(r'''{{Extra}}''')
         newExtraString = r'''<div id="extra">{{Extra}}</div>'''
@@ -660,6 +660,7 @@ class ASGUI():
 
         else:
             pass
+            
 
 
     def addTimer(self):
@@ -696,19 +697,19 @@ function countdown( elementName, minutes, seconds )
 countdown("s2", 0, ''' + str(duration) + '''); //2nd value is the minute, 3rd is the seconds
 </script>
 <!-- Timer Code End-->'''
-            frontBox = self.topCardLayout.findChild(QTextEdit, "front")
+            frontBox = self.self.clayout.findChild(QTextEdit, "front")
             frontBox.setPlainText(frontBox.toPlainText() + "\n" + timerText)
-            pass
+            
 
         else:
             showInfo('Duration cannot be zero!')
-            pass
+            
 
-        pass
+        
 
     def removeTimer(self):
 
-        frontBox = self.topCardLayout.findChild(QTextEdit, "front")
+        frontBox = self.self.clayout.findChild(QTextEdit, "front")
         signalString = frontBox.toPlainText()
         timerStartIndex = signalString.find(r'''<!-- Timer Code Start-->''')
         if timerStartIndex != -1:
@@ -718,9 +719,9 @@ countdown("s2", 0, ''' + str(duration) + '''); //2nd value is the minute, 3rd is
             secondPart = signalString[timerEndIndex + 22:]
 
             frontBox.setPlainText(firstPart + " " + secondPart)
-            pass
+            
         else:
             showInfo('No Timer Detected!')
-            pass
+            
 
-        pass
+        
