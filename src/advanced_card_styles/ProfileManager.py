@@ -1,29 +1,22 @@
-from PyQt5.QtWidgets import *
-from PyQt5.QtGui import *
 import os
 from pathlib import Path
 from zipfile import ZipFile
-from aqt.utils import showInfo
+
+from PyQt5.QtGui import *
+from PyQt5.QtWidgets import *
 
 dir_path = os.path.dirname(os.path.realpath(__file__))
 basepath = Path(dir_path) / 'user_files'
 
 
 def getAvailableProfiles():
-    profilesList = []
-
-    # currentDir = Path.cwd()
-    # showInfo(currentDir.name)
-    # showInfo(currentDir.parent.name)
+    result = []
     for directory in (entry for entry in basepath.iterdir() if entry.is_dir()):
-
         listOfFiles = [x.name for x in directory.iterdir() if x.is_file()]
-        # print(listOfFiles)
-
         if 'css.css' in listOfFiles:
-            profilesList.append(directory.name)
+            result.append(directory.name)
 
-    return profilesList
+    return result
 
 
 def saveProfile(profileName, cssText, frontText=None, backText=None):
@@ -43,14 +36,17 @@ def saveProfile(profileName, cssText, frontText=None, backText=None):
     if backText is not None:
         with open(backFile, 'w+') as savefile:
             savefile.write(backText)
-    
 
 
 def exportProfile(profileComboBox, includeAllCBox):
     profileNameDir = profileComboBox.currentText()
-    exportPath, _ = QFileDialog.getSaveFileName(None, 'Export Profile :', directory=str(Path.home() / "Desktop"), filter='Advanced Card Style Profile (*.acs);;All Files (*)')
+    exportPath, _ = QFileDialog.getSaveFileName(
+        None, 
+        'Export Profile :',
+        directory=str(Path.home() / "Desktop"), 
+        filter='Advanced Card Style Profile (*.acs);;All Files (*)'
+    )
     print(exportPath)
-    # if Path.cwd() != 'user_files':
     os.chdir(basepath)
     listOfFiles = [x for x in Path(profileNameDir).iterdir() if x.is_file()]
 
@@ -62,7 +58,7 @@ def exportProfile(profileComboBox, includeAllCBox):
                     # zip the file
                     if includeAllCBox.isChecked():
                         zipped.write(file)
-                    
+
                 else:
                     zipped.write(file)
 
@@ -71,7 +67,8 @@ def exportProfile(profileComboBox, includeAllCBox):
 
 def importProfile():
     beforeImportList = getAvailableProfiles()
-    importPath, _ = QFileDialog.getOpenFileName(None, 'Import Profile :', directory=str(Path.home() / "Desktop"), filter='Advanced Card Style Profile (*.acs);;All Files (*)')
+    importPath, _ = QFileDialog.getOpenFileName(None, 'Import Profile :', directory=str(
+        Path.home() / "Desktop"), filter='Advanced Card Style Profile (*.acs);;All Files (*)')
     print(importPath)
     if importPath != '':
         with ZipFile(importPath, 'r') as zipped:
@@ -87,13 +84,9 @@ def importProfile():
     else:
         return None
 
-    
-
 
 class ProfileFolder():
     """ProfileFolder"""
 
     def __init__(self, arg):
         pass
-
-        

@@ -17,23 +17,16 @@ from .myCssParser import *
 
 class ASGUI():
 
-    profile = clayout.profile = CssProfile()
-    memoryBackedUpCssProfileText = ''
-    # memoryBackedUpCssProfileText = clayout.memoryBackedUpCssProfileText = ''
-    window = clayout.window = AdvancedStylerUI.Ui_Form()
-    # cssBoxx = clayout.cssBoxx = QTextEdit()
-    # self.clayout = QWidget()
-    some = clayout.some = QWidget()
+    def __init__(self):
+        self.profile = CssProfile()
+        self.memoryBackedUpCssProfileText = ''
+        self.window = AdvancedStylerUI.Ui_Form()
+        self.form = QWidget()
 
     # ui setup
-    def loadUI(self, parentUI):
-        self.window.setupUi(self.some)
-        # someB = QPushButton('Test')
-        # someL = QVBoxLayout()
-        # someL.addWidget(some)
-        # someL.addWidget(someB)
-
-        self.clayout = parentUI
+    def loadUI(self, parent):
+        self.window.setupUi(self.form)
+        self.clayout = parent
 
         self.cardWidthButtonGroup = clayout.cardWidthButtonGroup = QButtonGroup()
         self.cardWidthButtonGroup.addButton(
@@ -63,13 +56,10 @@ class ASGUI():
         self.imgShadowButtonGroup.addButton(
             self.window.imgShadowGlowRadioButton)
 
-        self.some.setWindowIcon(self.clayout.windowIcon())
+        self.form.setWindowIcon(self.clayout.windowIcon())
 
-        self.some.setWindowModality(Qt.ApplicationModal)
-        self.some.show()
-
-        # take the focus away from the first input area when starting up,
-        # as users tend to accidentally type into the template
+        self.form.setWindowModality(Qt.ApplicationModal)
+        self.form.show()
 
         text = self.clayout.model['css']
         self.loadSettingsFromCss(text)
@@ -78,7 +68,9 @@ class ASGUI():
         self.connectButtonsAndTextboxes()
         self.unifiedUpdateAction()
 
-        self.some.setFocus()
+        # take the focus away from the first input area when starting up,
+        # as users tend to accidentally type into the template
+        self.form.setFocus()
 
     def connectButtonsAndTextboxes(self):
         # connect buttons and textboxes
@@ -363,24 +355,24 @@ class ASGUI():
                         self.window.imgShadowGlowRadioButton.setChecked(True)
 
     def unifiedUpdateAction(self):
-        lineEdits = self.some.findChildren(QLineEdit)
+        lineEdits = self.form.findChildren(QLineEdit)
         for ledit in lineEdits:
             ledit.textChanged.connect(self.updateProfile)
 
-        checkBoxes = self.some.findChildren(QCheckBox)
+        checkBoxes = self.form.findChildren(QCheckBox)
         for cbox in checkBoxes:
             cbox.stateChanged.connect(self.updateProfile)
 
-        spinBoxes = self.some.findChildren(QSpinBox)
+        spinBoxes = self.form.findChildren(QSpinBox)
         for spbox in spinBoxes:
             spbox.valueChanged.connect(self.updateProfile)
         self.window.timerSpinBox.valueChanged.disconnect()
 
-        radioButtons = self.some.findChildren(QRadioButton)
+        radioButtons = self.form.findChildren(QRadioButton)
         for rbutton in radioButtons:
             rbutton.toggled.connect(self.updateProfile)
 
-        fontComboBox = self.some.findChild(QFontComboBox, 'fontComboBox')
+        fontComboBox = self.form.findChild(QFontComboBox, 'fontComboBox')
         fontComboBox.currentFontChanged.connect(self.updateProfile)
 
     def makeRuleDictionnaryFromUI(self):
@@ -641,7 +633,6 @@ class ASGUI():
         return ruleDictFromSettings
 
     def updateProfile(self):
-        # gets called when "Preview" button gets clicked
         for ruleName, ruleDict in self.makeRuleDictionnaryFromUI().items():
             self.profile.setNewDeclarationsDictOrDeleteRule(ruleName, ruleDict)
 
@@ -693,8 +684,8 @@ class ASGUI():
 
     def addExtraTag(self):
         signalString = self.front
-        extraIndex = signalString.find(r'''{{Extra}}''')
-        newExtraString = r'''<div id="extra">{{Extra}}</div>'''
+        extraIndex = signalString.find(r'{{Extra}}')
+        newExtraString = r'<div id="extra">{{Extra}}</div>'
         if extraIndex != -1:
             firstPart = signalString[:extraIndex]
             secondPart = signalString[extraIndex + 9:]

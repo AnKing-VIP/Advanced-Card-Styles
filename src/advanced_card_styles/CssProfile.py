@@ -1,4 +1,3 @@
-# from tinycss2 import *
 from .myCssParser import *
 from pathlib import Path
 from aqt.utils import showInfo
@@ -36,16 +35,13 @@ class CssProfile():
         self.name = 'NOT YET INITIALIZED'
         self.rootList = []
         self.ruleNamesList = []
-        
 
     # Initializing functions :
-
     def initializeFromFile(self, filePath):
         self.rootList = createRootListFromFile(filePath)
         self.__createRuleNamesList()
         self.name = Path(filePath).name.split('.')[0]
         self.initialized = True
-        
 
     def initializeFromCssString(self, cssString, profileName):
         self.rootList = createRootListFromCssString(cssString)
@@ -53,11 +49,8 @@ class CssProfile():
         self.__createRuleNamesList()
         self.name = profileName
         self.initialized = True
-        
-
 
     # Changing stuff functions :
-
     def __createRuleNamesList(self):
         self.ruleNamesList = [x[0] for x in self.rootList if type(x) == tuple]
 
@@ -76,7 +69,6 @@ class CssProfile():
             return a[0]
 
     def setNewDeclarationsDictOrDeleteRule(self, ruleName, newOrderedDict):
-
         # First we get the index of the tuple of the requested rule
         # Then we create a new tuple with same ruleName
         # Then we overwrite the item at the same index
@@ -92,7 +84,6 @@ class CssProfile():
                     break
                 else:
                     continue
-            
 
         if index != None:
             if newOrderedDict != None:
@@ -102,15 +93,14 @@ class CssProfile():
         else:
             if newOrderedDict != None:
                 self.rootList.append((ruleName, newOrderedDict))
-        
 
     # Accessing functions :
 
     # This is a property for the cssString attribute. No setter is included.
+
     @property
     def cssString(self):
         return convertRootlistToCssStr(self.rootList)
-
 
     # Saving Functions :
     def saveToFile(self, filePath):
@@ -122,4 +112,3 @@ class CssProfile():
         self.newCssString = convertRootlistToCssStr(self.rootList)
         with open(filePath, 'w+') as saveFile:
             saveFile.write(self.newCssString)
-        

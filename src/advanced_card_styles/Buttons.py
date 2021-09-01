@@ -20,7 +20,6 @@ class Buttons(QWidget):
 
     # initialize ui
     def initalizeUI(self):
-
         advancedEditorButton = QPushButton("Advanced Editor")
         saveButton = QPushButton("Save")
         importButton = QPushButton("Import")
@@ -46,17 +45,16 @@ class Buttons(QWidget):
 
         saveButton.clicked.connect(self.getNameAndSave)
         exportButton.clicked.connect(self.getExportConfig)
-        importButton.clicked.connect(self.importAndUpdate)
+        importButton.clicked.connect(self.importAndUpdateProfile)
         advancedEditorButton.clicked.connect(self.advancedEditorButtonAction)
         profileComboBox.currentTextChanged.connect(
-            lambda: self.loadChosenProfile(ask_user=True))
+            lambda: self.loadSelectedProfile(ask_user=True))
 
         self.setLayout(newLayout)
 
     # importing / exporting / applying profiles
     def getNameAndSave(self):
-
-        profilename, saveStatus = self.getCurrentProfileNameAndSaveStatus()
+        profilename, _ = self.getCurrentProfileNameAndSaveStatus()
 
         nameWindow = self.nameWindow = QWidget()
         nameText = self.nameText = QLineEdit()
@@ -83,37 +81,13 @@ class Buttons(QWidget):
         nameText.setText(profilename)
         nameText.setFocus()
 
-        nameText.returnPressed.connect(partial(self.save, self.nameText))
+        nameText.returnPressed.connect(
+            partial(self.saveProfile, self.nameText))
         nameText.returnPressed.connect(nameWindow.close)
-        okButton.clicked.connect(partial(self.save, self.nameText))
+        okButton.clicked.connect(partial(self.saveProfile, self.nameText))
         okButton.clicked.connect(nameWindow.close)
 
-    def getExportConfig(self):
-
-        exportConfigWindow = self.exportConfigWindow = QWidget()
-
-        okButton = QPushButton('Export')
-
-        includeAllCBox = self.includeAllCBox = QCheckBox(
-            'Include \'Front\' and \'Back\' html (USE WITH CAUTION!)')
-
-        vlayout = QVBoxLayout()
-        hlayout = QHBoxLayout()
-        vlayout.addWidget(includeAllCBox)
-        hlayout.addStretch()
-        hlayout.addWidget(okButton)
-        vlayout.addLayout(hlayout)
-
-        exportConfigWindow.setLayout(vlayout)
-        exportConfigWindow.setWindowModality(Qt.ApplicationModal)
-        exportConfigWindow.show()
-        exportConfigWindow.setFocus()
-
-        okButton.clicked.connect(partial(
-            ProfileManager.exportProfile, self.profileComboBox, self.includeAllCBox))
-        okButton.clicked.connect(exportConfigWindow.close)
-
-    def save(self, nametxt, withFrontAndBack=True):
+    def saveProfile(self, nametxt, withFrontAndBack=True):
         print('-' + nametxt.text() + '-')
         cssTextWithConfigs = self.insertOrChangeConfigs(
             self.clayout.model['css'], nametxt.text(), self.Saved)
@@ -122,25 +96,11 @@ class Buttons(QWidget):
             nametxt.text(), cssTextWithConfigs, self.front, self.back)
         self.updateComboBox(nametxt.text(), forceUpdate=True)
 
-    def importAndUpdate(self):
+    def importAndUpdateProfile(self):
         a = ProfileManager.importProfile()
         self.updateComboBox(a)
 
-    def updateComboBox(self, preferedProfile=None, forceUpdate=False):
-        if preferedProfile != None:
-            self.profileComboBox.addItem(preferedProfile)
-            self.profileComboBox.setCurrentText(preferedProfile)
-        else:
-            selected = self.profileComboBox.currentText()
-            self.profileComboBox.clear()
-            self.profileComboBox.addItems(
-                ProfileManager.getAvailableProfiles())
-            self.profileComboBox.setCurrentText(selected)
-
-        if forceUpdate:
-            self.loadChosenProfile()
-
-    def loadChosenProfile(self, ask_user=False):
+    def loadSelectedProfile(self, ask_user=False):
         dir_path = os.path.dirname(os.path.realpath(__file__))
         basepath = Path(dir_path) / 'user_files' / \
             self.profileComboBox.currentText()
@@ -169,7 +129,6 @@ class Buttons(QWidget):
                     with open(str(basepath / 'back.txt'), 'r') as fileB:
                         self.back = fileB.read()
 
-
         self.clayout.change_tracker.mark_basic()
         self.clayout.update_current_ordinal_and_redraw(self.clayout.ord)
 
@@ -193,6 +152,7 @@ class Buttons(QWidget):
         else:
             return 'Custom Profile', 'Not saved'
 
+    # configs
     def insertOrChangeConfigs(self, cssText, profileName, saveStatus):
         signalString = cssText[:11]
         if signalString == '/* Profile:':
@@ -204,11 +164,50 @@ class Buttons(QWidget):
         else:
             return '/* Profile: {} || Satus: {} */ \n'.format(profileName, saveStatus) + cssText
 
+    def getExportConfig(self):
+        exportConfigWindow = self.exportConfigWindow = QWidget()
+
+        okButton = QPushButton('Export')
+
+        includeAllCBox = self.includeAllCBox = QCheckBox(
+            'Include \'Front\' and \'Back\' html (USE WITH CAUTION!)')
+
+        vlayout = QVBoxLayout()
+        hlayout = QHBoxLayout()
+        vlayout.addWidget(includeAllCBox)
+        hlayout.addStretch()
+        hlayout.addWidget(okButton)
+        vlayout.addLayout(hlayout)
+
+        exportConfigWindow.setLayout(vlayout)
+        exportConfigWindow.setWindowModality(Qt.ApplicationModal)
+        exportConfigWindow.show()
+        exportConfigWindow.setFocus()
+
+        okButton.clicked.connect(partial(
+            ProfileManager.exportProfile, self.profileComboBox, self.includeAllCBox))
+        okButton.clicked.connect(exportConfigWindow.close)
+
+    # profile combobox
+    def updateComboBox(self, preferedProfile=None, forceUpdate=False):
+        if preferedProfile != None:
+            self.profileComboBox.addItem(preferedProfile)
+            self.profileComboBox.setCurrentText(preferedProfile)
+        else:
+            selected = self.profileComboBox.currentText()
+            self.profileComboBox.clear()
+            self.profileComboBox.addItems(
+                ProfileManager.getAvailableProfiles())
+            self.profileComboBox.setCurrentText(selected)
+
+        if forceUpdate:
+            self.loadSelectedProfile()
+
     # reading / writing current template front and back
     @property
     def front(self):
         return self.clayout.templates[self.clayout.ord]['qfmt']
-        
+
     @front.setter
     def front(self, value):
         self.clayout.templates[self.clayout.ord]['qfmt'] = value
@@ -216,7 +215,7 @@ class Buttons(QWidget):
     @property
     def back(self):
         return self.clayout.templates[self.clayout.ord]['afmt']
-        
+
     @back.setter
     def back(self, value):
         self.clayout.templates[self.clayout.ord]['afmt'] = value
