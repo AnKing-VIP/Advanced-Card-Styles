@@ -29,9 +29,6 @@ class Ui_Form(object):
         self.horizontalLayout_6 = QtWidgets.QHBoxLayout(self.layoutWidget)
         self.horizontalLayout_6.setContentsMargins(0, 0, 0, 0)
         self.horizontalLayout_6.setObjectName("horizontalLayout_6")
-        self.saveButton = QtWidgets.QPushButton(self.layoutWidget)
-        self.saveButton.setObjectName("saveButton")
-        self.horizontalLayout_6.addWidget(self.saveButton)
         self.undoAllButton = QtWidgets.QPushButton(self.layoutWidget)
         self.undoAllButton.setObjectName("undoAllButton")
         self.horizontalLayout_6.addWidget(self.undoAllButton)
@@ -882,7 +879,6 @@ class Ui_Form(object):
 
         self.retranslateUi(Form)
         QtCore.QMetaObject.connectSlotsByName(Form)
-        Form.setTabOrder(self.saveButton, self.cardGroupBox)
         Form.setTabOrder(self.cardGroupBox, self.fontComboBox)
         Form.setTabOrder(self.fontComboBox, self.sizeSpinBox)
         Form.setTabOrder(self.sizeSpinBox, self.alignLeft)
@@ -921,7 +917,6 @@ class Ui_Form(object):
     def retranslateUi(self, Form):
         _translate = QtCore.QCoreApplication.translate
         Form.setWindowTitle(_("Advanced Card Styler "))
-        self.saveButton.setText(_("Preview"))
         self.undoAllButton.setText(_("Undo All"))
         self.cancelButton.setText(_("Accept and Close"))
         self.cardGroupBox.setTitle(_("Card Style"))

@@ -119,7 +119,7 @@ class Buttons(QWidget):
             self.clayout.model['css'], nametxt.text(), self.Saved)
 
         ProfileManager.saveProfile(
-            nametxt.text(), cssTextWithConfigs, self.clayout.model['qfmt'], self.clayout.model['afmt'])
+            nametxt.text(), cssTextWithConfigs, self.front, self.back)
         self.updateComboBox(nametxt.text(), forceUpdate=True)
 
     def importAndUpdate(self):
@@ -164,16 +164,14 @@ class Buttons(QWidget):
             if not ask_user or reply == QMessageBox.Yes:
                 if (basepath / 'front.txt').exists():
                     with open(str(basepath / 'front.txt'), 'r') as fileF:
-                        front = fileF.read()
-                        self.clayout.model['qfmt'] = front
+                        self.front = fileF.read()
                 if (basepath / 'back.txt').exists():
                     with open(str(basepath / 'back.txt'), 'r') as fileB:
-                        back = fileB.read()
-                        self.clayout.model['afmt'] = back
+                        self.back = fileB.read()
 
 
         self.clayout.change_tracker.mark_basic()
-        self.clayout.renderPreview()
+        self.clayout.update_current_ordinal_and_redraw(self.clayout.ord)
 
     def getCurrentProfileNameAndSaveStatus(self):
         cssText = self.clayout.model['css']
@@ -206,11 +204,27 @@ class Buttons(QWidget):
         else:
             return '/* Profile: {} || Satus: {} */ \n'.format(profileName, saveStatus) + cssText
 
+    # reading / writing current template front and back
+    @property
+    def front(self):
+        return self.clayout.templates[self.clayout.ord]['qfmt']
+        
+    @front.setter
+    def front(self, value):
+        self.clayout.templates[self.clayout.ord]['qfmt'] = value
+
+    @property
+    def back(self):
+        return self.clayout.templates[self.clayout.ord]['afmt']
+        
+    @back.setter
+    def back(self, value):
+        self.clayout.templates[self.clayout.ord]['afmt'] = value
+
     # launch advanced editor
     def advancedEditorButtonAction(self):
-        cssBox = self.clayout.findChild(QTextEdit, "css")
         a = AdvancedStylerGui.ASGUI()
-        a.loadUI(cssBox, self.clayout)
+        a.loadUI(self.clayout)
 
     @property
     def Saved(self):
