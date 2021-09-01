@@ -7,4 +7,4 @@ profile/
 
 meta.json
 
-src/*/__pycache__/
+__pycache__/
