@@ -400,12 +400,14 @@ class ASGUI():
                 if self.window.cardTextColor.text() in ('black', '#000000'):
                     cardDict['color'] = 'black'
                 else:
-                    cardDict['color'] = self.window.cardTextColor.text() + ' !important'
+                    cardDict['color'] = self.window.cardTextColor.text() + \
+                        ' !important'
             if self.window.cardBGColor.text() != '':
                 if self.window.cardBGColor.text() in ('white', '#ffffff'):
                     cardDict['background-color'] = 'white'
                 else:
-                    cardDict['background-color'] = self.window.cardBGColor.text() + ' !important'
+                    cardDict['background-color'] = self.window.cardBGColor.text() + \
+                        ' !important'
 
             if self.window.enableCardMaxWidth.isChecked():
                 if self.window.cardWidthPercetRadioButton.isChecked():
@@ -658,20 +660,20 @@ class ASGUI():
                 return '/* Profile: {} || Satus: {} */ \n\n'.format(profileName, saveStatus) + newCss
         else:
             return '/* Profile: {} || Satus: {} */ \n\n'.format('Custom Profile', saveStatus) + cssText
-    
+
     # read / write front and back of current card template
     @property
     def front(self):
         return self.clayout.templates[self.clayout.ord]['qfmt']
-        
+
     @front.setter
     def front(self, value):
         self.clayout.templates[self.clayout.ord]['qfmt'] = value
-        
+
     @property
     def back(self):
         return self.clayout.templates[self.clayout.ord]['afmt']
-        
+
     @back.setter
     def back(self, value):
         self.clayout.templates[self.clayout.ord]['afmt'] = value
@@ -679,8 +681,9 @@ class ASGUI():
     # misc
     def undoAll(self):
         self.clayout.model['css'] = self.memoryBackedUpCssProfileText
-        self.clayout.change_tracker.mark_basic()
         self.loadSettingsFromCss(self.memoryBackedUpCssProfileText)
+        self.clayout.change_tracker.mark_basic()
+        self.clayout.update_current_ordinal_and_redraw(self.clayout.ord)
 
     def addExtraTag(self):
         signalString = self.front
@@ -689,9 +692,9 @@ class ASGUI():
         if extraIndex != -1:
             firstPart = signalString[:extraIndex]
             secondPart = signalString[extraIndex + 9:]
-            self.back = firstPart + \
-                newExtraString + secondPart
+            self.back = firstPart + newExtraString + secondPart
             self.clayout.change_tracker.mark_basic()
+            self.clayout.update_current_ordinal_and_redraw(self.clayout.ord)
 
     def addTimer(self):
         duration = self.window.timerSpinBox.value()
