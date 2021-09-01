@@ -6,11 +6,17 @@ from .Buttons import Buttons
 
 
 def add_buttons_to_layout(clayout):
-    buttonsLayout = QHBoxLayout()
     buttons = Buttons(clayout)
-    buttonsLayout.addWidget(buttons)
 
-    clayout.buttons.insertLayout(1, buttonsLayout)
+    buttonsLayout = QHBoxLayout()
+    buttonsLayout.addWidget(buttons)
+    buttonsLayout.setContentsMargins(0, 0, 0, 0)
+
+    groupbox = QGroupBox()
+    groupbox.setLayout(buttonsLayout)
+    groupbox.setContentsMargins(0, 0, 0, 0)
+
+    clayout.buttons.insertWidget(1, groupbox)
 
 
 card_layout_will_show.append(add_buttons_to_layout)

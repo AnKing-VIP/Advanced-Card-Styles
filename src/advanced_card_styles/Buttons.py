@@ -2,6 +2,7 @@ import os
 from functools import partial
 from pathlib import Path
 
+from aqt import mw
 from aqt.clayout import CardLayout
 from PyQt5.Qt import *
 from PyQt5.QtCore import Qt
@@ -21,17 +22,23 @@ class Buttons(QWidget):
     # initialize ui
     def initalizeUI(self):
         advancedEditorButton = QPushButton("Advanced Editor")
-        saveButton = QPushButton("Save")
-        importButton = QPushButton("Import")
-        exportButton = QPushButton("Export")
+        saveButton = QPushButton("Save Style") 
+
+        menuButton = QPushButton('...', self)
+        menuButton.setFixedWidth(35)
+
+        menu = QMenu(self)
+        importAction = menu.addAction("Import")
+        exportAction = menu.addAction("Export")
+        menuButton.setMenu(menu)
+
         profileComboBox = self.profileComboBox = QComboBox()
         newLayout = QHBoxLayout()
+
         newLayout.addWidget(advancedEditorButton)
-        # newLayout.addStretch()
         newLayout.addWidget(profileComboBox)
         newLayout.addWidget(saveButton)
-        newLayout.addWidget(importButton)
-        newLayout.addWidget(exportButton)
+        newLayout.addWidget(menuButton)
 
         profileComboBox.addItems(ProfileManager.getAvailableProfiles())
 
@@ -43,10 +50,10 @@ class Buttons(QWidget):
             profileComboBox.addItem(currentProfile)
             profileComboBox.setCurrentText(currentProfile)
 
-        saveButton.clicked.connect(self.getNameAndSave)
-        exportButton.clicked.connect(self.getExportConfig)
-        importButton.clicked.connect(self.importAndUpdateProfile)
+        importAction.triggered.connect(self.getExportConfig)
+        exportAction.triggered.connect(self.importAndUpdateProfile)
         advancedEditorButton.clicked.connect(self.advancedEditorButtonAction)
+        saveButton.clicked.connect(self.getNameAndSave)
         profileComboBox.currentTextChanged.connect(
             lambda: self.loadSelectedProfile(ask_user=True))
 
