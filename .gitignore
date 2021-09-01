@@ -1,0 +1,10 @@
+.vscode/
+*.code-workspace
+
+build/
+tools/
+profile/
+
+meta.json
+
+src/*/__pycache__/
