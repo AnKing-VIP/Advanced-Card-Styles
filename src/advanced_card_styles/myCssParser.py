@@ -62,7 +62,7 @@ def createRootListFromCssString(cssString):
             rule = item  # just for clarification and not needed
             ruleName = serialize(rule.prelude).strip(' ')
             newDict = convertRuleContentToOrderedDict(rule.content)
-            if len(newDict) is not 0:  # may cause things to disappear
+            if len(newDict) != 0:  # may cause things to disappear
                 rootList.append((ruleName, newDict))  # append the new rule as a tuple
 
     return rootList

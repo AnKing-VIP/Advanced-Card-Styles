@@ -72,7 +72,7 @@ class CssProfile():
                 a.append(x[1])
         # a = [x[1] for x in self.rootList if (type(x) == tuple and x[0] == ruleName)]
 
-        if len(a) is not 0:  # this is a failsafe to keep program running but can lead to disappearing stuff
+        if len(a) != 0:  # this is a failsafe to keep program running but can lead to disappearing stuff
             return a[0]
 
     def setNewDeclarationsDictOrDeleteRule(self, ruleName, newOrderedDict):
@@ -94,13 +94,13 @@ class CssProfile():
                     continue
             pass
 
-        if index is not None:
-            if newOrderedDict is not None:
+        if index != None:
+            if newOrderedDict != None:
                 self.rootList[index] = (ruleName, newOrderedDict)
             else:
                 del self.rootList[index]
         else:
-            if newOrderedDict is not None:
+            if newOrderedDict != None:
                 self.rootList.append((ruleName, newOrderedDict))
         pass
 
@@ -116,7 +116,7 @@ class CssProfile():
     def saveToFile(self, filePath):
 
         if not self.initialized:
-            print('Object is NOT initialized yet !')
+            print('Object != initialized yet !')
             return None
 
         self.newCssString = convertRootlistToCssStr(self.rootList)

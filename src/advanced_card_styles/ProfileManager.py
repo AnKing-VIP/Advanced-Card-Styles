@@ -50,11 +50,11 @@ def exportProfile(profileComboBox, includeAllCBox):
     profileNameDir = profileComboBox.currentText()
     exportPath, _ = QFileDialog.getSaveFileName(None, 'Export Profile :', directory=str(Path.home() / "Desktop"), filter='Advanced Card Style Profile (*.acs);;All Files (*)')
     print(exportPath)
-    # if Path.cwd() is not 'user_files':
+    # if Path.cwd() != 'user_files':
     os.chdir(basepath)
     listOfFiles = [x for x in Path(profileNameDir).iterdir() if x.is_file()]
 
-    if exportPath is not '':
+    if exportPath != '':
         with ZipFile(exportPath, 'w') as zipped:
             # writing each file one by one
             for file in listOfFiles:
@@ -73,7 +73,7 @@ def importProfile():
     beforeImportList = getAvailableProfiles()
     importPath, _ = QFileDialog.getOpenFileName(None, 'Import Profile :', directory=str(Path.home() / "Desktop"), filter='Advanced Card Style Profile (*.acs);;All Files (*)')
     print(importPath)
-    if importPath is not '':
+    if importPath != '':
         with ZipFile(importPath, 'r') as zipped:
             zipped.extractall(basepath)
 

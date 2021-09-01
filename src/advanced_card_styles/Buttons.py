@@ -39,7 +39,7 @@ class Buttons(QWidget):
 
         currentProfile, _ = self.getCurrentProfileNameAndSaveStatus()
 
-        if profileComboBox.findText(currentProfile) is not -1:
+        if profileComboBox.findText(currentProfile) != -1:
             profileComboBox.setCurrentText(currentProfile)
         else:
             profileComboBox.addItem(currentProfile)
@@ -143,7 +143,7 @@ class Buttons(QWidget):
 
     def updateComboBox(self, preferedProfile=None, forceUpdate=False):
 
-        if preferedProfile is not None:
+        if preferedProfile != None:
             self.profileComboBox.addItem(preferedProfile)
             self.profileComboBox.setCurrentText(preferedProfile)
         else:

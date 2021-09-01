@@ -107,7 +107,7 @@ class ASGUI():
                     self.window.cardBGColor.setText(attributes['background-color'])
                     self.window.cardBGColor.setStyleSheet("QWidget { background-color: " + attributes['background-color'] + '}')
 
-                if 'max-width' in attributes and attributes['max-width'] is not 'none':
+                if 'max-width' in attributes and attributes['max-width'] != 'none':
                     att = attributes['max-width'].strip(' ')
                     self.window.enableCardMaxWidth.setChecked(True)
                     if '%' in att:
@@ -117,7 +117,7 @@ class ASGUI():
                         self.window.cardWidthPixelSpinBox.setValue(int(att[:len(att) - 2]))
                         self.window.cardWidthPixelRadioButton.setChecked(True)
 
-                if 'margin' in attributes and attributes['margin'] is not 'none':
+                if 'margin' in attributes and attributes['margin'] != 'none':
                     self.window.enableCardMargin.setChecked(True)
                     att = attributes['margin'].strip(' ')
                     if att == '20px auto':
@@ -126,7 +126,7 @@ class ASGUI():
                         self.window.cardMarginCustomRadio.setChecked(True)
                         self.window.cardMarginCustom.setText(att)
 
-                if 'word-wrap' in attributes and attributes['word-wrap'] is 'break-word':
+                if 'word-wrap' in attributes and attributes['word-wrap'] == 'break-word':
                     self.window.cardWordWrapCheckBox.setChecked(True)
 
             if rule.strip(' ') == 'b':
@@ -233,7 +233,7 @@ class ASGUI():
                     if attributes['display'] == 'block-inline':
                         self.window.imgInlineDisplayRadioButton.setChecked(True)
 
-                if 'max-width' in attributes and attributes['max-width'] is not 'none':
+                if 'max-width' in attributes and attributes['max-width'] != 'none':
                     att = attributes['max-width'].strip(' ')
                     self.window.enableImgMaxWidth.setChecked(True)
                     if '%' in att:
@@ -243,7 +243,7 @@ class ASGUI():
                         self.window.imgWidthPixelSpinBox.setValue(int(att[:len(att) - 2]))
                         self.window.imgWidthPixelRadioButton.setChecked(True)
 
-                if 'max-height' in attributes and attributes['max-height'] is not 'none':
+                if 'max-height' in attributes and attributes['max-height'] != 'none':
                     att = attributes['max-height'].strip(' ')
                     self.window.enableImgMaxHeight.setChecked(True)
                     if '%' in att:
@@ -278,7 +278,7 @@ class ASGUI():
 
     def showColorPicker(self, textField):
         colorDialig = QColorDialog()
-        if textField.text() is not '':
+        if textField.text() != '':
             oldColor = QColor()
             oldColor.setNamedColor(textField.text())
             color = colorDialig.getColor(initial=oldColor)
@@ -367,10 +367,10 @@ class ASGUI():
         if self.window.cardGroupBox.isChecked():
             cardDict = OrderedDict()
 
-            if self.window.fontComboBox.currentText() is not '':
+            if self.window.fontComboBox.currentText() != '':
                 cardDict['font-family'] = self.window.fontComboBox.currentText()
 
-            if self.window.sizeSpinBox.value() is not 0:
+            if self.window.sizeSpinBox.value() != 0:
                 cardDict['font-size'] = str(self.window.sizeSpinBox.value()) + 'px'
 
             if self.window.alignLeft.isChecked():
@@ -380,24 +380,24 @@ class ASGUI():
             if self.window.alignRight.isChecked():
                 cardDict['text-align'] = 'right'
 
-            if self.window.cardTextColor.text() is not '':
+            if self.window.cardTextColor.text() != '':
                 cardDict['color'] = self.window.cardTextColor.text()
-            if self.window.cardBGColor.text() is not '':
+            if self.window.cardBGColor.text() != '':
                 cardDict['background-color'] = self.window.cardBGColor.text()
 
             if self.window.enableCardMaxWidth.isChecked():
                 if self.window.cardWidthPercetRadioButton.isChecked():
-                    if self.window.cardWidthPerectSpinBox.value() is not 0:
+                    if self.window.cardWidthPerectSpinBox.value() != 0:
                         cardDict['max-width'] = str(self.window.cardWidthPerectSpinBox.value()) + '%'
                 if self.window.cardWidthPixelRadioButton.isChecked():
-                    if self.window.cardWidthPixelSpinBox.value() is not 0:
+                    if self.window.cardWidthPixelSpinBox.value() != 0:
                         cardDict['max-width'] = str(self.window.cardWidthPixelSpinBox.value()) + 'px'
 
             if self.window.enableCardMargin.isChecked():
                 if self.window.cardMarginCenterRadio.isChecked():
                     cardDict['margin'] = '20px auto'
                 if self.window.cardMarginCustomRadio.isChecked():
-                    if self.window.cardMarginCustom.text() is not '':
+                    if self.window.cardMarginCustom.text() != '':
                         cardDict['margin'] = self.window.cardMarginCustom.text()
 
             if self.window.cardWordWrapCheckBox.isChecked():
@@ -420,15 +420,15 @@ class ASGUI():
                 clozeDict['text-decoration'] = 'underline'
 
 
-            if self.window.clozeSizeSpinBox.value() is not 0:
+            if self.window.clozeSizeSpinBox.value() != 0:
                 clozeDict['font-size'] = str(self.window.clozeSizeSpinBox.value()) + 'px'
 
-            if self.window.clozeTextColor.text() is not None and self.window.clozeTextColor.text() is not '':
+            if self.window.clozeTextColor.text() != None and self.window.clozeTextColor.text() != '':
                 clozeDict['color'] = self.window.clozeTextColor.text()
-            if self.window.clozeBGColor.text() is not None and self.window.clozeBGColor.text() is not '':
+            if self.window.clozeBGColor.text() != None and self.window.clozeBGColor.text() != '':
                 clozeDict['background-color'] = self.window.clozeBGColor.text()
 
-            if len(clozeDict) is not 0:
+            if len(clozeDict) != 0:
                 ruleDictFromSettings['.cloze'] = clozeDict
             else:
                 ruleDictFromSettings['.cloze'] = None
@@ -447,16 +447,16 @@ class ASGUI():
                 extraDict['text-decoration'] = 'underline'
 
 
-            if self.window.extraSizeSpinBox.value() is not 0:
+            if self.window.extraSizeSpinBox.value() != 0:
                 extraDict['font-size'] = str(self.window.extraSizeSpinBox.value()) + 'px'
 
-            if self.window.extraTextColor.text() is not None and self.window.extraTextColor.text() is not '':
+            if self.window.extraTextColor.text() != None and self.window.extraTextColor.text() != '':
                 extraDict['color'] = self.window.extraTextColor.text()
-            if self.window.extraBGColor.text() is not None and self.window.extraBGColor.text() is not '':
+            if self.window.extraBGColor.text() != None and self.window.extraBGColor.text() != '':
                 extraDict['background-color'] = self.window.extraBGColor.text()
 
 
-            if len(extraDict) is not 0:
+            if len(extraDict) != 0:
                 ruleDictFromSettings['#extra'] = extraDict
             else:
                 ruleDictFromSettings['#extra'] = None
@@ -477,22 +477,22 @@ class ASGUI():
 
             if self.window.enableImgMaxWidth.isChecked():
                 if self.window.imgWidthPercetRadioButton.isChecked():
-                    if self.window.imgWidthPerectSpinBox.value() is not 0:
+                    if self.window.imgWidthPerectSpinBox.value() != 0:
                         imgDict['max-width'] = str(self.window.imgWidthPerectSpinBox.value()) + '%'
                 if self.window.imgWidthPixelRadioButton.isChecked():
-                    if self.window.imgWidthPixelSpinBox.value() is not 0:
+                    if self.window.imgWidthPixelSpinBox.value() != 0:
                         imgDict['max-width'] = str(self.window.imgWidthPixelSpinBox.value()) + 'px'
 
             if self.window.enableImgMaxHeight.isChecked():
                 if self.window.imgHeightPercetRadioButton.isChecked():
-                    if self.window.imgHeightPerectSpinBox.value() is not 0:
+                    if self.window.imgHeightPerectSpinBox.value() != 0:
                         imgDict['max-height'] = str(self.window.imgHeightPerectSpinBox.value()) + '%'
                 if self.window.imgHeightPixelRadioButton.isChecked():
-                    if self.window.imgHeightPixelSpinBox.value() is not 0:
+                    if self.window.imgHeightPixelSpinBox.value() != 0:
                         imgDict['max-height'] = str(self.window.imgHeightPixelSpinBox.value()) + 'px'
 
             if self.window.enableImgBorder.isChecked():
-                if self.window.imgBorderColor.text() is not None and self.window.imgBorderPixelSpinBox.value() is not 0:
+                if self.window.imgBorderColor.text() != None and self.window.imgBorderPixelSpinBox.value() != 0:
                     imgDict['border'] = str.format("{}px solid {}".format(self.window.imgBorderPixelSpinBox.value(), self.window.imgBorderColor.text()))
 
             if self.window.enableImgShadow.isChecked():
@@ -503,10 +503,10 @@ class ASGUI():
                 if self.window.imgShadowGlowRadioButton.isChecked():
                     styleofshadow1 = '0px 0px'
                     styleofshadow2 = '8px 3px'
-                if self.window.imgShadowColor.text() is not None:
+                if self.window.imgShadowColor.text() != None:
                     imgDict['box-shadow'] = str.format("{} {} {}".format(styleofshadow1, styleofshadow2, self.window.imgShadowColor.text()))
 
-            if len(imgDict) is not 0:
+            if len(imgDict) != 0:
                 ruleDictFromSettings['img'] = imgDict
             else:
                 ruleDictFromSettings['img'] = None
@@ -530,7 +530,7 @@ class ASGUI():
                     boldDict['font-style'] = 'italic'
                 if self.window.boldUnderlinedBox.isChecked():
                     boldDict['text-decoration'] = 'underline'
-                if self.window.boldTextColor.text() is not '':
+                if self.window.boldTextColor.text() != '':
                     boldDict['color'] = self.window.boldTextColor.text()
 
                 ruleDictFromSettings['b'] = boldDict
@@ -553,7 +553,7 @@ class ASGUI():
                     italicsDict['text-decoration'] = 'underline'
                 else:
                     italicsDict['text-decoration'] = 'none'
-                if self.window.italicsTextColor.text() is not '':
+                if self.window.italicsTextColor.text() != '':
                     italicsDict['color'] = self.window.italicsTextColor.text()
 
                 ruleDictFromSettings['i'] = italicsDict
@@ -572,7 +572,7 @@ class ASGUI():
                     underlinedDict['text-decoration'] = 'underline'
                 else:
                     underlinedDict['text-decoration'] = 'none'
-                if self.window.underlinedTextColor.text() is not '':
+                if self.window.underlinedTextColor.text() != '':
                     underlinedDict['color'] = self.window.underlinedTextColor.text()
 
                 ruleDictFromSettings['u'] = underlinedDict
@@ -589,7 +589,7 @@ class ASGUI():
                     linksDict['font-style'] = 'italic'
                 if self.window.linksUnderlinedBox.isChecked():
                     linksDict['text-decoration'] = 'underline'
-                if self.window.linksTextColor.text() is not '':
+                if self.window.linksTextColor.text() != '':
                     linksDict['color'] = self.window.linksTextColor.text()
 
                 ruleDictFromSettings['a'] = linksDict
@@ -664,7 +664,7 @@ class ASGUI():
 
     def addTimer(self):
         duration = self.window.timerSpinBox.value()
-        if duration is not 0:
+        if duration != 0:
             timerText = r'''<!-- Timer Code Start-->
 <br>
 <span class="timer" id="s2" style='font-size:20px; color: #A6ABB9; opacity: 0.95;'></span>
@@ -711,7 +711,7 @@ countdown("s2", 0, ''' + str(duration) + '''); //2nd value is the minute, 3rd is
         frontBox = self.topCardLayout.findChild(QTextEdit, "front")
         signalString = frontBox.toPlainText()
         timerStartIndex = signalString.find(r'''<!-- Timer Code Start-->''')
-        if timerStartIndex is not -1:
+        if timerStartIndex != -1:
             timerEndIndex = signalString.find(r'''<!-- Timer Code End-->''')
 
             firstPart = signalString[:timerStartIndex]
