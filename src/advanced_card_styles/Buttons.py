@@ -1,8 +1,8 @@
 import os
+import re
 from functools import partial
 from pathlib import Path
 
-from aqt import mw
 from aqt.clayout import CardLayout
 from PyQt5.Qt import *
 from PyQt5.QtCore import Qt
@@ -40,7 +40,7 @@ class Buttons(QWidget):
         newLayout.addWidget(saveButton)
         newLayout.addWidget(menuButton)
 
-        profileComboBox.addItems(ProfileManager.getAvailableProfiles())
+        self.loadProfilesIntoCombobox()
 
         currentProfile, _ = self.getCurrentProfileNameAndSaveStatus()
 
@@ -203,12 +203,25 @@ class Buttons(QWidget):
         else:
             selected = self.profileComboBox.currentText()
             self.profileComboBox.clear()
-            self.profileComboBox.addItems(
-                ProfileManager.getAvailableProfiles())
+            self.loadProfilesIntoCombobox()
             self.profileComboBox.setCurrentText(selected)
 
         if forceUpdate:
             self.loadSelectedProfile()
+            
+    def loadProfilesIntoCombobox(self):
+        available_profiles = ProfileManager.getAvailableProfiles()
+        
+        # sort by text in brackets (e.g. [Cloze])
+        def sort(x):
+            m = re.search('\[[a-zA-Z-_]+\]', x)
+            if m:
+                return m.group(0) + x
+            else:
+                return x
+
+        available_profiles = sorted(available_profiles, key=sort)
+        self.profileComboBox.addItems(available_profiles)
 
     # reading / writing current template front and back
     @property
