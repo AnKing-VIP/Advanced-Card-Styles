@@ -27,7 +27,7 @@ def serialize_identifier(value):
         an Unicode string
         that would parse as an :class:`~tinycss2.ast.IdentToken`
         whose :attr:`~tinycss2.ast.IdentToken.value` attribute
-        equals the passed :obj:`value` argument.
+        equals the ed :obj:`value` argument.
 
     """
     if value == '-':

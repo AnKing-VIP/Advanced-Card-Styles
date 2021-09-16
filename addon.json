@@ -1,0 +1,11 @@
+{
+    "display_name": "Advanced card styles",
+    "module_name": "advanced_card_styles",
+    "repo_name": "",
+    "ankiweb_id": "",
+    "author": "RisingOrange",
+    "conflicts": [],
+    "targets": [
+        "anki21"
+    ]
+}
