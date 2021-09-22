@@ -3,67 +3,29 @@ from collections import OrderedDict
 from aqt.utils import showInfo
 
 
-def createRootDictFromFile(filePath):
-    itemsInFile = getListOfItemsFromFile(filePath)
-
-    rootDict = OrderedDict()
-    rootList = []
-
-    for item in itemsInFile:
-
-        if item.type == 'whitespace' or item.type == 'comment':
-            rootList.append(item)
-
-        else:
-            rule = item  # just for clarification and not needed
-            ruleName = serialize(rule.prelude).strip(' ')
-            newDict = convertRuleContentToOrderedDict(rule.content)
-            rootList.append((ruleName, newDict))  # append the new rule as a tuple
-
-    rootDict[items] = rootList
-
-    return rootDict
-
-
 def createRootListFromFile(filePath):
-
     itemsInFile = getListOfItemsFromFile(filePath)
-
-    rootList = []
-
-    for item in itemsInFile:
-
-        if item.type == 'whitespace' or item.type == 'comment':
-            rootList.append(item)
-
-        else:
-            rule = item  # just for clarification and not needed
-            ruleName = serialize(rule.prelude).strip(' ')
-            newDict = convertRuleContentToOrderedDict(rule.content)
-            rootList.append((ruleName, newDict))  # append the new rule as a tuple
-
-    return rootList
+    return createRootListFromItemsInFile(itemsInFile)
 
 
 def createRootListFromCssString(cssString):
-
     itemsInFile = getListOfItemsFromCssString(cssString)
-    # showInfo('after getListOfItemsFromCssString')
+    return createRootListFromItemsInFile(itemsInFile)
 
 
+def createRootListFromItemsInFile(itemsInFile):
     rootList = []
 
     for item in itemsInFile:
-
-        if item.type == 'whitespace' or item.type == 'comment':
-            rootList.append(item)
-
-        else:
-            rule = item  # just for clarification and not needed
+        if item.type == 'qualified-rule':
+            rule = item
             ruleName = serialize(rule.prelude).strip(' ')
             newDict = convertRuleContentToOrderedDict(rule.content)
             if len(newDict) != 0:  # may cause things to disappear
-                rootList.append((ruleName, newDict))  # append the new rule as a tuple
+                # append the new rule as a tuple
+                rootList.append((ruleName, newDict))
+        else:
+            rootList.append(item)
 
     return rootList
 
@@ -86,13 +48,15 @@ def convertRuleContentToOrderedDict(ruleContent):
     into an actual dictionnary with key value data for css attributes.
     '''
     orderdRule = OrderedDict()
-    a = parse_declaration_list(ruleContent, skip_comments=True, skip_whitespace=True)
+    a = parse_declaration_list(
+        ruleContent, skip_comments=True, skip_whitespace=True)
     lastitem = None
     for dec in a:
         # print(dec)
         if dec.type == 'error':
             showInfo(dec.kind)
-            showInfo('Some kind of error in CSS code (Last correct item was : ' + lastitem + ')\n' + dec.message)
+            showInfo('Some kind of error in CSS code (Last correct item was : ' +
+                     lastitem + ')\n' + dec.message)
         if dec.type == 'whitespace' or dec.type == 'comment':  # extra security
             continue
         else:
@@ -117,12 +81,12 @@ def convertRootlistToCssStr(rootList):
             if item[1] is None:
                 continue
             for key, value in item[1].items():
-                masterStr = masterStr + "\n    " + key + ": " + str(value).strip(' ') + ";"
+                masterStr = masterStr + "\n    " + key + \
+                    ": " + str(value).strip(' ') + ";"
 
             masterStr = masterStr + "\n" + "}\n"
             # masterStr = masterStr[:len(masterStr) - 2] + "\n" + "}"
 
-            
         # This next part cleans the string so that there is only one empty line between classes.
         else:
             # masterStr = masterStr + serialize([item])
