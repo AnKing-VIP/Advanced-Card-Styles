@@ -22,10 +22,14 @@ class Buttons(QWidget):
     # initialize ui
     def initalizeUI(self):
         advancedEditorButton = QPushButton("Advanced Editor")
+        advancedEditorButton.setAutoDefault(False)
+
         saveButton = QPushButton("Save Style") 
+        saveButton.setAutoDefault(False)
 
         menuButton = QPushButton('...', self)
         menuButton.setFixedWidth(35)
+        menuButton.setAutoDefault(False)
 
         menu = QMenu(self)
         importAction = menu.addAction("Import")
