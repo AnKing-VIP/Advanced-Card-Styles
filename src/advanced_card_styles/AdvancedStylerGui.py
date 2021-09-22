@@ -1,6 +1,6 @@
 from functools import partial
 
-from aqt import clayout
+from aqt import clayout, mw
 from aqt.utils import showInfo
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import *
@@ -15,51 +15,27 @@ from .myCssParser import *
 # 2 - Add Profile Detection
 
 
-class ASGUI():
+class ASGUI(QDialog):
 
-    def __init__(self):
+    def __init__(self, clayout):
+        QDialog.__init__(self, clayout, Qt.Window)
+        mw.setupDialogGC(self)
+        self.mw = mw
+        self.clayout = clayout
+
         self.profile = CssProfile()
         self.memoryBackedUpCssProfileText = ''
-        self.window = AdvancedStylerUI.Ui_Form()
-        self.form = QWidget()
 
-    # ui setup
-    def loadUI(self, parent):
-        self.window.setupUi(self.form)
-        self.clayout = parent
+        self.form = AdvancedStylerUI.Ui_Form()
+        self.form.setupUi(self)
+        self.loadUI()
 
-        self.cardWidthButtonGroup = clayout.cardWidthButtonGroup = QButtonGroup()
-        self.cardWidthButtonGroup.addButton(
-            self.window.cardWidthPercetRadioButton)
-        self.cardWidthButtonGroup.addButton(
-            self.window.cardWidthPixelRadioButton)
+        self.show()
 
-        self.cardMarginButtonGroup = clayout.cardMarginButtonGroup = QButtonGroup()
-        self.cardMarginButtonGroup.addButton(self.window.cardMarginCenterRadio)
-        self.cardMarginButtonGroup.addButton(self.window.cardMarginCustomRadio)
+    def loadUI(self):
+        self.setWindowIcon(self.clayout.windowIcon())
 
-        self.imgWidthButtonGroup = clayout.imgWidthButtonGroup = QButtonGroup()
-        self.imgWidthButtonGroup.addButton(
-            self.window.imgWidthPercetRadioButton)
-        self.imgWidthButtonGroup.addButton(
-            self.window.imgWidthPixelRadioButton)
-
-        self.imgHeightButtonGroup = clayout.imgHeightButtonGroup = QButtonGroup()
-        self.imgHeightButtonGroup.addButton(
-            self.window.imgHeightPercetRadioButton)
-        self.imgHeightButtonGroup.addButton(
-            self.window.imgHeightPixelRadioButton)
-
-        self.imgShadowButtonGroup = clayout.imgShadowButtonGroup = QButtonGroup()
-        self.imgShadowButtonGroup.addButton(
-            self.window.imgShadowDropRadioButton)
-        self.imgShadowButtonGroup.addButton(
-            self.window.imgShadowGlowRadioButton)
-
-        self.form.setWindowIcon(self.clayout.windowIcon())
-
-        self.form.setWindowModality(Qt.ApplicationModal)
-        self.form.show()
+        self.setWindowModality(Qt.ApplicationModal)
 
         text = self.clayout.model['css']
         self.loadSettingsFromCss(text)
@@ -70,62 +46,61 @@ class ASGUI():
 
         # take the focus away from the first input area when starting up,
         # as users tend to accidentally type into the template
-        self.form.setFocus()
 
     def connectButtonsAndTextboxes(self):
         # connect buttons and textboxes
-        self.window.cardTextColorButton.clicked.connect(
-            partial(self.showColorPicker, self.window.cardTextColor))
-        self.window.cardBGColorbutton.clicked.connect(
-            partial(self.showColorPicker, self.window.cardBGColor))
-        self.window.boldTextColorButton.clicked.connect(
-            partial(self.showColorPicker, self.window.boldTextColor))
-        self.window.italicsTextColorButton.clicked.connect(
-            partial(self.showColorPicker, self.window.italicsTextColor))
-        self.window.underlinedTextColorButton.clicked.connect(
-            partial(self.showColorPicker, self.window.underlinedTextColor))
-        self.window.linksTextColorButton.clicked.connect(
-            partial(self.showColorPicker, self.window.linksTextColor))
-        self.window.clozeTextColorButton.clicked.connect(
-            partial(self.showColorPicker, self.window.clozeTextColor))
-        self.window.clozeBGColorButton.clicked.connect(
-            partial(self.showColorPicker, self.window.clozeBGColor))
-        self.window.extraTextColorButton.clicked.connect(
-            partial(self.showColorPicker, self.window.extraTextColor))
-        self.window.extraBGColorButton.clicked.connect(
-            partial(self.showColorPicker, self.window.extraBGColor))
-        self.window.imgBorderColorButton.clicked.connect(
-            partial(self.showColorPicker, self.window.imgBorderColor))
-        self.window.imgShadowColorButton.clicked.connect(
-            partial(self.showColorPicker, self.window.imgShadowColor))
-        self.window.undoAllButton.clicked.connect(self.undoAll)
-        self.window.cancelButton.clicked.connect(self.onCancelButtonPress)
-        self.window.addTimerButton.clicked.connect(self.addTimer)
-        self.window.removeTimerButton.clicked.connect(self.removeTimer)
-        self.window.extraTagButton.clicked.connect(self.addExtraTag)
+        self.form.cardTextColorButton.clicked.connect(
+            partial(self.showColorPicker, self.form.cardTextColor))
+        self.form.cardBGColorbutton.clicked.connect(
+            partial(self.showColorPicker, self.form.cardBGColor))
+        self.form.boldTextColorButton.clicked.connect(
+            partial(self.showColorPicker, self.form.boldTextColor))
+        self.form.italicsTextColorButton.clicked.connect(
+            partial(self.showColorPicker, self.form.italicsTextColor))
+        self.form.underlinedTextColorButton.clicked.connect(
+            partial(self.showColorPicker, self.form.underlinedTextColor))
+        self.form.linksTextColorButton.clicked.connect(
+            partial(self.showColorPicker, self.form.linksTextColor))
+        self.form.clozeTextColorButton.clicked.connect(
+            partial(self.showColorPicker, self.form.clozeTextColor))
+        self.form.clozeBGColorButton.clicked.connect(
+            partial(self.showColorPicker, self.form.clozeBGColor))
+        self.form.extraTextColorButton.clicked.connect(
+            partial(self.showColorPicker, self.form.extraTextColor))
+        self.form.extraBGColorButton.clicked.connect(
+            partial(self.showColorPicker, self.form.extraBGColor))
+        self.form.imgBorderColorButton.clicked.connect(
+            partial(self.showColorPicker, self.form.imgBorderColor))
+        self.form.imgShadowColorButton.clicked.connect(
+            partial(self.showColorPicker, self.form.imgShadowColor))
+        self.form.undoAllButton.clicked.connect(self.undoAll)
+        self.form.cancelButton.clicked.connect(self.onCancelButtonPress)
+        self.form.addTimerButton.clicked.connect(self.addTimer)
+        self.form.removeTimerButton.clicked.connect(self.removeTimer)
+        self.form.extraTagButton.clicked.connect(self.addExtraTag)
 
-        boldList = [self.window.boldBoldCBOX, self.window.boldItalicBox,
-                    self.window.boldUnderlinedBox, self.window.boldTextColor, self.window.boldTextColorButton]
-        self.window.enableBold.stateChanged.connect(
-            partial(self.disableElements, self.window.enableBold, boldList))
+        boldList = [self.form.boldBoldCBOX, self.form.boldItalicBox,
+                    self.form.boldUnderlinedBox, self.form.boldTextColor, self.form.boldTextColorButton]
+        self.form.enableBold.stateChanged.connect(
+            partial(self.disableElements, self.form.enableBold, boldList))
 
-        italicsList = [self.window.italicsBoldCBOX, self.window.italicsItalicBox,
-                       self.window.italicsUnderlinedBox, self.window.italicsTextColor, self.window.italicsTextColorButton]
-        self.window.enableItalics.stateChanged.connect(
-            partial(self.disableElements, self.window.enableItalics, italicsList))
+        italicsList = [self.form.italicsBoldCBOX, self.form.italicsItalicBox,
+                       self.form.italicsUnderlinedBox, self.form.italicsTextColor, self.form.italicsTextColorButton]
+        self.form.enableItalics.stateChanged.connect(
+            partial(self.disableElements, self.form.enableItalics, italicsList))
 
-        underlinedList = [self.window.underlinedBoldCBOX, self.window.underlinedItalicBox,
-                          self.window.underlinedUnderlinedBox, self.window.underlinedTextColor, self.window.underlinedTextColorButton]
-        self.window.enableUnderlined.stateChanged.connect(
-            partial(self.disableElements, self.window.enableUnderlined, underlinedList))
+        underlinedList = [self.form.underlinedBoldCBOX, self.form.underlinedItalicBox,
+                          self.form.underlinedUnderlinedBox, self.form.underlinedTextColor, self.form.underlinedTextColorButton]
+        self.form.enableUnderlined.stateChanged.connect(
+            partial(self.disableElements, self.form.enableUnderlined, underlinedList))
 
-        linksList = [self.window.linksBoldCBOX, self.window.linksItalicBox,
-                     self.window.linksUnderlinedBox, self.window.linksTextColor, self.window.linksTextColorButton]
-        self.window.enableLinks.stateChanged.connect(
-            partial(self.disableElements, self.window.enableLinks, linksList))
+        linksList = [self.form.linksBoldCBOX, self.form.linksItalicBox,
+                     self.form.linksUnderlinedBox, self.form.linksTextColor, self.form.linksTextColorButton]
+        self.form.enableLinks.stateChanged.connect(
+            partial(self.disableElements, self.form.enableLinks, linksList))
 
     def onCancelButtonPress(self):
-        self.form.close()
+        self.close()
 
     # read / write css from ui widgets
     def loadSettingsFromCss(self, filePath):
@@ -142,291 +117,291 @@ class ASGUI():
 
             if rule.strip(' ') == '.card':
                 if 'font-family' in attributes:
-                    self.window.fontComboBox.setCurrentText(
+                    self.form.fontComboBox.setCurrentText(
                         attributes['font-family'])
                 if 'font-size' in attributes:
-                    self.window.sizeSpinBox.setValue(
+                    self.form.sizeSpinBox.setValue(
                         int(str(attributes['font-size'])[:len(attributes['font-size']) - 2]))
                 if 'text-align' in attributes:
                     if attributes['text-align'] == 'left':
-                        self.window.alignLeft.setChecked(True)
+                        self.form.alignLeft.setChecked(True)
                     if attributes['text-align'] == 'center':
-                        self.window.alignCenter.setChecked(True)
+                        self.form.alignCenter.setChecked(True)
                     if attributes['text-align'] == 'right':
-                        self.window.alignRight.setChecked(True)
+                        self.form.alignRight.setChecked(True)
                 if 'color' in attributes:
-                    self.window.cardTextColor.setText(attributes['color'])
-                    self.window.cardTextColor.setStyleSheet(
+                    self.form.cardTextColor.setText(attributes['color'])
+                    self.form.cardTextColor.setStyleSheet(
                         "QWidget { background-color: " + attributes['color'] + '}')
 
                 if 'background-color' in attributes:
-                    self.window.cardBGColor.setText(
+                    self.form.cardBGColor.setText(
                         attributes['background-color'])
-                    self.window.cardBGColor.setStyleSheet(
+                    self.form.cardBGColor.setStyleSheet(
                         "QWidget { background-color: " + attributes['background-color'] + '}')
 
                 if 'max-width' in attributes and attributes['max-width'] != 'none':
                     att = attributes['max-width'].strip(' ')
-                    self.window.enableCardMaxWidth.setChecked(True)
+                    self.form.enableCardMaxWidth.setChecked(True)
                     if '%' in att:
-                        self.window.cardWidthPerectSpinBox.setValue(
+                        self.form.cardWidthPerectSpinBox.setValue(
                             int(att[:len(att) - 1]))
-                        self.window.cardWidthPercetRadioButton.setChecked(True)
+                        self.form.cardWidthPercetRadioButton.setChecked(True)
                     if 'px' in att:
-                        self.window.cardWidthPixelSpinBox.setValue(
+                        self.form.cardWidthPixelSpinBox.setValue(
                             int(att[:len(att) - 2]))
-                        self.window.cardWidthPixelRadioButton.setChecked(True)
+                        self.form.cardWidthPixelRadioButton.setChecked(True)
 
                 if 'margin' in attributes and attributes['margin'] != 'none':
-                    self.window.enableCardMargin.setChecked(True)
+                    self.form.enableCardMargin.setChecked(True)
                     att = attributes['margin'].strip(' ')
                     if att == '20px auto':
-                        self.window.cardMarginCenterRadio.setChecked(True)
+                        self.form.cardMarginCenterRadio.setChecked(True)
                     else:
-                        self.window.cardMarginCustomRadio.setChecked(True)
-                        self.window.cardMarginCustom.setText(att)
+                        self.form.cardMarginCustomRadio.setChecked(True)
+                        self.form.cardMarginCustom.setText(att)
 
                 if 'word-wrap' in attributes and attributes['word-wrap'] == 'break-word':
-                    self.window.cardWordWrapCheckBox.setChecked(True)
+                    self.form.cardWordWrapCheckBox.setChecked(True)
 
             if rule.strip(' ') == 'b':
-                self.window.enableBold.setChecked(True)
+                self.form.enableBold.setChecked(True)
                 if 'color' in attributes:
-                    self.window.boldTextColor.setText(attributes['color'])
-                    self.window.boldTextColor.setStyleSheet(
+                    self.form.boldTextColor.setText(attributes['color'])
+                    self.form.boldTextColor.setStyleSheet(
                         "QWidget { background-color: " + attributes['color'] + '}')
 
                 # because bold already has bold, boldBoldCBOX will be checked by default unless font-weight is normal   font-weight: bold;
                 if 'font-weight' not in attributes or attributes['font-weight'] != 'normal':
-                    self.window.boldBoldCBOX.setChecked(True)
+                    self.form.boldBoldCBOX.setChecked(True)
                 if 'font-style' in attributes and attributes['font-style'] == 'italic':
-                    self.window.boldItalicBox.setChecked(True)
+                    self.form.boldItalicBox.setChecked(True)
                 if 'text-decoration' in attributes and attributes['text-decoration'] == 'underline':
-                    self.window.boldUnderlinedBox.setChecked(True)
+                    self.form.boldUnderlinedBox.setChecked(True)
 
             if rule.strip(' ') == 'i':
-                self.window.enableItalics.setChecked(True)
+                self.form.enableItalics.setChecked(True)
                 if 'color' in attributes:
-                    self.window.italicsTextColor.setText(attributes['color'])
-                    self.window.italicsTextColor.setStyleSheet(
+                    self.form.italicsTextColor.setText(attributes['color'])
+                    self.form.italicsTextColor.setStyleSheet(
                         "QWidget { background-color: " + attributes['color'] + '}')
 
                 # because bold already has bold, boldBoldCBOX will be checked by default unless font-weight is normal   font-weight: bold;
                 if 'font-weight' in attributes and attributes['font-weight'] == 'bold':
-                    self.window.italicsBoldCBOX.setChecked(True)
+                    self.form.italicsBoldCBOX.setChecked(True)
                 if 'font-style' not in attributes or attributes['font-style'] != 'normal':
-                    self.window.italicsItalicBox.setChecked(True)
+                    self.form.italicsItalicBox.setChecked(True)
                 if 'text-decoration' in attributes and attributes['text-decoration'] == 'underline':
-                    self.window.italicsUnderlinedBox.setChecked(True)
+                    self.form.italicsUnderlinedBox.setChecked(True)
 
             if rule.strip(' ') == 'u':
-                self.window.enableUnderlined.setChecked(True)
+                self.form.enableUnderlined.setChecked(True)
                 if 'color' in attributes:
-                    self.window.underlinedTextColor.setText(
+                    self.form.underlinedTextColor.setText(
                         attributes['color'])
-                    self.window.underlinedTextColor.setStyleSheet(
+                    self.form.underlinedTextColor.setStyleSheet(
                         "QWidget { background-color: " + attributes['color'] + '}')
 
                 # because bold already has bold, boldBoldCBOX will be checked by default unless font-weight is normal   font-weight: bold;
                 if 'font-weight' in attributes and attributes['font-weight'] == 'bold':
-                    self.window.underlinedBoldCBOX.setChecked(True)
+                    self.form.underlinedBoldCBOX.setChecked(True)
                 if 'font-style' in attributes and attributes['font-style'] != 'italic':
-                    self.window.underlinedItalicBox.setChecked(True)
+                    self.form.underlinedItalicBox.setChecked(True)
                 if 'text-decoration' not in attributes or attributes['text-decoration'] != 'none':
-                    self.window.underlinedUnderlinedBox.setChecked(True)
+                    self.form.underlinedUnderlinedBox.setChecked(True)
 
             if rule.strip(' ') == 'a':
-                self.window.enableLinks.setChecked(True)
+                self.form.enableLinks.setChecked(True)
                 if 'color' in attributes:
-                    self.window.linksTextColor.setText(attributes['color'])
-                    self.window.linksTextColor.setStyleSheet(
+                    self.form.linksTextColor.setText(attributes['color'])
+                    self.form.linksTextColor.setStyleSheet(
                         "QWidget { background-color: " + attributes['color'] + '}')
 
                 if 'font-weight' in attributes and attributes['font-weight'] == 'bold':
-                    self.window.linksBoldCBOX.setChecked(True)
+                    self.form.linksBoldCBOX.setChecked(True)
                 if 'font-style' in attributes and attributes['font-style'] == 'italic':
-                    self.window.linksItalicBox.setChecked(True)
+                    self.form.linksItalicBox.setChecked(True)
                 if 'text-decoration' in attributes and attributes['text-decoration'] == 'underline':
-                    self.window.linksUnderlinedBox.setChecked(True)
+                    self.form.linksUnderlinedBox.setChecked(True)
 
             if rule.strip(' ') == '.cloze':
-                self.window.clozeGroupBox.setChecked(True)
+                self.form.clozeGroupBox.setChecked(True)
                 if 'color' in attributes:
-                    self.window.clozeTextColor.setText(attributes['color'])
-                    self.window.clozeTextColor.setStyleSheet(
+                    self.form.clozeTextColor.setText(attributes['color'])
+                    self.form.clozeTextColor.setStyleSheet(
                         "QWidget { background-color: " + attributes['color'] + '}')
 
                 if 'background-color' in attributes:
-                    self.window.clozeBGColor.setText(
+                    self.form.clozeBGColor.setText(
                         attributes['background-color'])
-                    self.window.clozeBGColor.setStyleSheet(
+                    self.form.clozeBGColor.setStyleSheet(
                         "QWidget { background-color: " + attributes['background-color'] + '}')
 
                 if 'font-weight' in attributes and attributes['font-weight'] == 'bold':
-                    self.window.clozeBoldCBOX.setChecked(True)
+                    self.form.clozeBoldCBOX.setChecked(True)
                 if 'font-style' in attributes and attributes['font-style'] == 'italic':
-                    self.window.clozeItalicBox.setChecked(True)
+                    self.form.clozeItalicBox.setChecked(True)
                 if 'text-decoration' in attributes and attributes['text-decoration'] == 'underline':
-                    self.window.clozeUnderlinedBox.setChecked(True)
+                    self.form.clozeUnderlinedBox.setChecked(True)
                 if 'font-size' in attributes:
-                    self.window.clozeSizeSpinBox.setValue(
+                    self.form.clozeSizeSpinBox.setValue(
                         int(str(attributes['font-size'])[:len(attributes['font-size']) - 2]))
 
             if rule.strip(' ') == '#extra':
-                self.window.extraGroupBox.setChecked(True)
+                self.form.extraGroupBox.setChecked(True)
                 if 'color' in attributes:
-                    self.window.extraTextColor.setText(attributes['color'])
-                    self.window.extraTextColor.setStyleSheet(
+                    self.form.extraTextColor.setText(attributes['color'])
+                    self.form.extraTextColor.setStyleSheet(
                         "QWidget { background-color: " + attributes['color'] + '}')
 
                 if 'background-color' in attributes:
-                    self.window.extraBGColor.setText(
+                    self.form.extraBGColor.setText(
                         attributes['background-color'])
-                    self.window.extraBGColor.setStyleSheet(
+                    self.form.extraBGColor.setStyleSheet(
                         "QWidget { background-color: " + attributes['background-color'] + '}')
 
                 if 'font-weight' in attributes and attributes['font-weight'] == 'bold':
-                    self.window.extraBoldCBOX.setChecked(True)
+                    self.form.extraBoldCBOX.setChecked(True)
                 if 'font-style' in attributes and attributes['font-style'] == 'italic':
-                    self.window.extraItalicBox.setChecked(True)
+                    self.form.extraItalicBox.setChecked(True)
                 if 'text-decoration' in attributes and attributes['text-decoration'] == 'underline':
-                    self.window.extraUnderlinedBox.setChecked(True)
+                    self.form.extraUnderlinedBox.setChecked(True)
                 if 'font-size' in attributes:
-                    self.window.extraSizeSpinBox.setValue(
+                    self.form.extraSizeSpinBox.setValue(
                         int(str(attributes['font-size'])[:len(attributes['font-size']) - 2]))
 
             if rule.strip(' ') == 'img':
 
                 if 'display' in attributes:
                     if attributes['display'] == 'none':
-                        self.window.noneDisplayRadioButton.setChecked(True)
+                        self.form.noneDisplayRadioButton.setChecked(True)
                     if attributes['display'] == 'block':
-                        self.window.imgBlockDisplayRadioButton.setChecked(True)
+                        self.form.imgBlockDisplayRadioButton.setChecked(True)
                     if attributes['display'] == 'block-inline':
-                        self.window.imgInlineDisplayRadioButton.setChecked(
+                        self.form.imgInlineDisplayRadioButton.setChecked(
                             True)
 
                 if 'max-width' in attributes and attributes['max-width'] != 'none':
                     att = attributes['max-width'].strip(' ')
-                    self.window.enableImgMaxWidth.setChecked(True)
+                    self.form.enableImgMaxWidth.setChecked(True)
                     if '%' in att:
-                        self.window.imgWidthPerectSpinBox.setValue(
+                        self.form.imgWidthPerectSpinBox.setValue(
                             int(att[:len(att) - 1]))
-                        self.window.imgWidthPercetRadioButton.setChecked(True)
+                        self.form.imgWidthPercetRadioButton.setChecked(True)
                     if 'px' in att:
-                        self.window.imgWidthPixelSpinBox.setValue(
+                        self.form.imgWidthPixelSpinBox.setValue(
                             int(att[:len(att) - 2]))
-                        self.window.imgWidthPixelRadioButton.setChecked(True)
+                        self.form.imgWidthPixelRadioButton.setChecked(True)
 
                 if 'max-height' in attributes and attributes['max-height'] != 'none':
                     att = attributes['max-height'].strip(' ')
-                    self.window.enableImgMaxHeight.setChecked(True)
+                    self.form.enableImgMaxHeight.setChecked(True)
                     if '%' in att:
-                        self.window.imgHeightPerectSpinBox.setValue(
+                        self.form.imgHeightPerectSpinBox.setValue(
                             int(att[:len(att) - 1]))
-                        self.window.imgHeightPercetRadioButton.setChecked(True)
+                        self.form.imgHeightPercetRadioButton.setChecked(True)
                     if 'px' in att:
-                        self.window.imgHeightPerectSpinBox.setValue(
+                        self.form.imgHeightPerectSpinBox.setValue(
                             int(att[:len(att) - 2]))
-                        self.window.imgHeightPercetRadioButton.setChecked(True)
+                        self.form.imgHeightPercetRadioButton.setChecked(True)
 
                 if 'border' in attributes:
                     # imgBorderPixelSpinBox  imgBorderColor
-                    self.window.enableImgBorder.setChecked(True)
+                    self.form.enableImgBorder.setChecked(True)
                     att = attributes['border'].strip(' ')
                     attWords = att.split()
                     pix = attWords[0]
-                    self.window.imgHeightPerectSpinBox.setValue(
+                    self.form.imgHeightPerectSpinBox.setValue(
                         int(pix[:len(pix) - 2]))
-                    self.window.imgBorderColor.setText(
+                    self.form.imgBorderColor.setText(
                         attWords[len(attWords) - 1])
 
                 if 'box-shadow' in attributes:
-                    self.window.enableImgShadow.setChecked(True)
+                    self.form.enableImgShadow.setChecked(True)
                     att = attributes['box-shadow'].strip(' ')
                     attWords = att.split()
                     if len(attWords) == 4:
-                        self.window.imgShadowColor.setText(
+                        self.form.imgShadowColor.setText(
                             attWords[len(attWords) - 1])
-                        self.window.imgShadowDropRadioButton.setChecked(True)
+                        self.form.imgShadowDropRadioButton.setChecked(True)
                     else:
-                        self.window.imgShadowColor.setText(
+                        self.form.imgShadowColor.setText(
                             attWords[len(attWords) - 1])
-                        self.window.imgShadowGlowRadioButton.setChecked(True)
+                        self.form.imgShadowGlowRadioButton.setChecked(True)
 
     def unifiedUpdateAction(self):
-        lineEdits = self.form.findChildren(QLineEdit)
+        lineEdits = self.findChildren(QLineEdit)
         for ledit in lineEdits:
             ledit.textChanged.connect(self.updateProfile)
 
-        checkBoxes = self.form.findChildren(QCheckBox)
+        checkBoxes = self.findChildren(QCheckBox)
         for cbox in checkBoxes:
             cbox.stateChanged.connect(self.updateProfile)
 
-        spinBoxes = self.form.findChildren(QSpinBox)
+        spinBoxes = self.findChildren(QSpinBox)
         for spbox in spinBoxes:
             spbox.valueChanged.connect(self.updateProfile)
-        self.window.timerSpinBox.valueChanged.disconnect()
+        self.form.timerSpinBox.valueChanged.disconnect()
 
-        radioButtons = self.form.findChildren(QRadioButton)
+        radioButtons = self.findChildren(QRadioButton)
         for rbutton in radioButtons:
             rbutton.toggled.connect(self.updateProfile)
 
-        fontComboBox = self.form.findChild(QFontComboBox, 'fontComboBox')
+        fontComboBox = self.findChild(QFontComboBox, 'fontComboBox')
         fontComboBox.currentFontChanged.connect(self.updateProfile)
 
     def makeRuleDictionnaryFromUI(self):
         ruleDictFromSettings = {}
 
         # make .Card
-        if self.window.cardGroupBox.isChecked():
+        if self.form.cardGroupBox.isChecked():
             cardDict = OrderedDict()
 
-            if self.window.fontComboBox.currentText() != '':
-                cardDict['font-family'] = self.window.fontComboBox.currentText()
+            if self.form.fontComboBox.currentText() != '':
+                cardDict['font-family'] = self.form.fontComboBox.currentText()
 
-            if self.window.sizeSpinBox.value() != 0:
+            if self.form.sizeSpinBox.value() != 0:
                 cardDict['font-size'] = str(
-                    self.window.sizeSpinBox.value()) + 'px'
+                    self.form.sizeSpinBox.value()) + 'px'
 
-            if self.window.alignLeft.isChecked():
+            if self.form.alignLeft.isChecked():
                 cardDict['text-align'] = 'left'
-            if self.window.alignCenter.isChecked():
+            if self.form.alignCenter.isChecked():
                 cardDict['text-align'] = 'center'
-            if self.window.alignRight.isChecked():
+            if self.form.alignRight.isChecked():
                 cardDict['text-align'] = 'right'
 
-            if self.window.cardTextColor.text() != '':
-                if self.window.cardTextColor.text() in ('black', '#000000'):
+            if self.form.cardTextColor.text() != '':
+                if self.form.cardTextColor.text() in ('black', '#000000'):
                     cardDict['color'] = 'black'
                 else:
-                    cardDict['color'] = self.window.cardTextColor.text() + \
+                    cardDict['color'] = self.form.cardTextColor.text() + \
                         ' !important'
-            if self.window.cardBGColor.text() != '':
-                if self.window.cardBGColor.text() in ('white', '#ffffff'):
+            if self.form.cardBGColor.text() != '':
+                if self.form.cardBGColor.text() in ('white', '#ffffff'):
                     cardDict['background-color'] = 'white'
                 else:
-                    cardDict['background-color'] = self.window.cardBGColor.text() + \
+                    cardDict['background-color'] = self.form.cardBGColor.text() + \
                         ' !important'
 
-            if self.window.enableCardMaxWidth.isChecked():
-                if self.window.cardWidthPercetRadioButton.isChecked():
-                    if self.window.cardWidthPerectSpinBox.value() != 0:
+            if self.form.enableCardMaxWidth.isChecked():
+                if self.form.cardWidthPercetRadioButton.isChecked():
+                    if self.form.cardWidthPerectSpinBox.value() != 0:
                         cardDict['max-width'] = str(
-                            self.window.cardWidthPerectSpinBox.value()) + '%'
-                if self.window.cardWidthPixelRadioButton.isChecked():
-                    if self.window.cardWidthPixelSpinBox.value() != 0:
+                            self.form.cardWidthPerectSpinBox.value()) + '%'
+                if self.form.cardWidthPixelRadioButton.isChecked():
+                    if self.form.cardWidthPixelSpinBox.value() != 0:
                         cardDict['max-width'] = str(
-                            self.window.cardWidthPixelSpinBox.value()) + 'px'
+                            self.form.cardWidthPixelSpinBox.value()) + 'px'
 
-            if self.window.enableCardMargin.isChecked():
-                if self.window.cardMarginCenterRadio.isChecked():
+            if self.form.enableCardMargin.isChecked():
+                if self.form.cardMarginCenterRadio.isChecked():
                     cardDict['margin'] = '20px auto'
-                if self.window.cardMarginCustomRadio.isChecked():
-                    if self.window.cardMarginCustom.text() != '':
-                        cardDict['margin'] = self.window.cardMarginCustom.text()
+                if self.form.cardMarginCustomRadio.isChecked():
+                    if self.form.cardMarginCustom.text() != '':
+                        cardDict['margin'] = self.form.cardMarginCustom.text()
 
-            if self.window.cardWordWrapCheckBox.isChecked():
+            if self.form.cardWordWrapCheckBox.isChecked():
                 cardDict['word-wrap'] = 'break-word'
 
             ruleDictFromSettings['.card'] = cardDict
@@ -434,24 +409,24 @@ class ASGUI():
             ruleDictFromSettings['.card'] = None
 
         # make .cloze
-        if self.window.clozeGroupBox.isChecked():
+        if self.form.clozeGroupBox.isChecked():
             clozeDict = OrderedDict()
 
-            if self.window.clozeBoldCBOX.isChecked():
+            if self.form.clozeBoldCBOX.isChecked():
                 clozeDict['font-weight'] = 'bold'
-            if self.window.clozeItalicBox.isChecked():
+            if self.form.clozeItalicBox.isChecked():
                 clozeDict['font-style'] = 'italic'
-            if self.window.clozeUnderlinedBox.isChecked():
+            if self.form.clozeUnderlinedBox.isChecked():
                 clozeDict['text-decoration'] = 'underline'
 
-            if self.window.clozeSizeSpinBox.value() != 0:
+            if self.form.clozeSizeSpinBox.value() != 0:
                 clozeDict['font-size'] = str(
-                    self.window.clozeSizeSpinBox.value()) + 'px'
+                    self.form.clozeSizeSpinBox.value()) + 'px'
 
-            if self.window.clozeTextColor.text() != None and self.window.clozeTextColor.text() != '':
-                clozeDict['color'] = self.window.clozeTextColor.text()
-            if self.window.clozeBGColor.text() != None and self.window.clozeBGColor.text() != '':
-                clozeDict['background-color'] = self.window.clozeBGColor.text()
+            if self.form.clozeTextColor.text() != None and self.form.clozeTextColor.text() != '':
+                clozeDict['color'] = self.form.clozeTextColor.text()
+            if self.form.clozeBGColor.text() != None and self.form.clozeBGColor.text() != '':
+                clozeDict['background-color'] = self.form.clozeBGColor.text()
 
             if len(clozeDict) != 0:
                 ruleDictFromSettings['.cloze'] = clozeDict
@@ -461,24 +436,24 @@ class ASGUI():
             ruleDictFromSettings['.cloze'] = None
 
         # make #extra
-        if self.window.extraGroupBox.isChecked():
+        if self.form.extraGroupBox.isChecked():
             extraDict = OrderedDict()
 
-            if self.window.extraBoldCBOX.isChecked():
+            if self.form.extraBoldCBOX.isChecked():
                 extraDict['font-weight'] = 'bold'
-            if self.window.extraItalicBox.isChecked():
+            if self.form.extraItalicBox.isChecked():
                 extraDict['font-styleextra'] = 'italic'
-            if self.window.extraUnderlinedBox.isChecked():
+            if self.form.extraUnderlinedBox.isChecked():
                 extraDict['text-decoration'] = 'underline'
 
-            if self.window.extraSizeSpinBox.value() != 0:
+            if self.form.extraSizeSpinBox.value() != 0:
                 extraDict['font-size'] = str(
-                    self.window.extraSizeSpinBox.value()) + 'px'
+                    self.form.extraSizeSpinBox.value()) + 'px'
 
-            if self.window.extraTextColor.text() != None and self.window.extraTextColor.text() != '':
-                extraDict['color'] = self.window.extraTextColor.text()
-            if self.window.extraBGColor.text() != None and self.window.extraBGColor.text() != '':
-                extraDict['background-color'] = self.window.extraBGColor.text()
+            if self.form.extraTextColor.text() != None and self.form.extraTextColor.text() != '':
+                extraDict['color'] = self.form.extraTextColor.text()
+            if self.form.extraBGColor.text() != None and self.form.extraBGColor.text() != '':
+                extraDict['background-color'] = self.form.extraBGColor.text()
 
             if len(extraDict) != 0:
                 ruleDictFromSettings['#extra'] = extraDict
@@ -489,52 +464,52 @@ class ASGUI():
             ruleDictFromSettings['#extra'] = None
 
         # make img
-        if self.window.imageGroupBox.isChecked():
+        if self.form.imageGroupBox.isChecked():
             imgDict = OrderedDict()
 
-            if self.window.noneDisplayRadioButton.isChecked():
+            if self.form.noneDisplayRadioButton.isChecked():
                 imgDict['display'] = 'none'
-            if self.window.imgBlockDisplayRadioButton.isChecked():
+            if self.form.imgBlockDisplayRadioButton.isChecked():
                 imgDict['display'] = 'block'
-            if self.window.imgInlineDisplayRadioButton.isChecked():
+            if self.form.imgInlineDisplayRadioButton.isChecked():
                 imgDict['display'] = 'block-inline'
 
-            if self.window.enableImgMaxWidth.isChecked():
-                if self.window.imgWidthPercetRadioButton.isChecked():
-                    if self.window.imgWidthPerectSpinBox.value() != 0:
+            if self.form.enableImgMaxWidth.isChecked():
+                if self.form.imgWidthPercetRadioButton.isChecked():
+                    if self.form.imgWidthPerectSpinBox.value() != 0:
                         imgDict['max-width'] = str(
-                            self.window.imgWidthPerectSpinBox.value()) + '%'
-                if self.window.imgWidthPixelRadioButton.isChecked():
-                    if self.window.imgWidthPixelSpinBox.value() != 0:
+                            self.form.imgWidthPerectSpinBox.value()) + '%'
+                if self.form.imgWidthPixelRadioButton.isChecked():
+                    if self.form.imgWidthPixelSpinBox.value() != 0:
                         imgDict['max-width'] = str(
-                            self.window.imgWidthPixelSpinBox.value()) + 'px'
+                            self.form.imgWidthPixelSpinBox.value()) + 'px'
 
-            if self.window.enableImgMaxHeight.isChecked():
-                if self.window.imgHeightPercetRadioButton.isChecked():
-                    if self.window.imgHeightPerectSpinBox.value() != 0:
+            if self.form.enableImgMaxHeight.isChecked():
+                if self.form.imgHeightPercetRadioButton.isChecked():
+                    if self.form.imgHeightPerectSpinBox.value() != 0:
                         imgDict['max-height'] = str(
-                            self.window.imgHeightPerectSpinBox.value()) + '%'
-                if self.window.imgHeightPixelRadioButton.isChecked():
-                    if self.window.imgHeightPixelSpinBox.value() != 0:
+                            self.form.imgHeightPerectSpinBox.value()) + '%'
+                if self.form.imgHeightPixelRadioButton.isChecked():
+                    if self.form.imgHeightPixelSpinBox.value() != 0:
                         imgDict['max-height'] = str(
-                            self.window.imgHeightPixelSpinBox.value()) + 'px'
+                            self.form.imgHeightPixelSpinBox.value()) + 'px'
 
-            if self.window.enableImgBorder.isChecked():
-                if self.window.imgBorderColor.text() != None and self.window.imgBorderPixelSpinBox.value() != 0:
+            if self.form.enableImgBorder.isChecked():
+                if self.form.imgBorderColor.text() != None and self.form.imgBorderPixelSpinBox.value() != 0:
                     imgDict['border'] = str.format("{}px solid {}".format(
-                        self.window.imgBorderPixelSpinBox.value(), self.window.imgBorderColor.text()))
+                        self.form.imgBorderPixelSpinBox.value(), self.form.imgBorderColor.text()))
 
-            if self.window.enableImgShadow.isChecked():
+            if self.form.enableImgShadow.isChecked():
                 styleofshadow1 = styleofshadow2 = ''
-                if self.window.imgShadowDropRadioButton.isChecked():
+                if self.form.imgShadowDropRadioButton.isChecked():
                     styleofshadow1 = '2px 2px'
                     styleofshadow2 = '5px'
-                if self.window.imgShadowGlowRadioButton.isChecked():
+                if self.form.imgShadowGlowRadioButton.isChecked():
                     styleofshadow1 = '0px 0px'
                     styleofshadow2 = '8px 3px'
-                if self.window.imgShadowColor.text() != None:
+                if self.form.imgShadowColor.text() != None:
                     imgDict['box-shadow'] = str.format("{} {} {}".format(
-                        styleofshadow1, styleofshadow2, self.window.imgShadowColor.text()))
+                        styleofshadow1, styleofshadow2, self.form.imgShadowColor.text()))
 
             if len(imgDict) != 0:
                 ruleDictFromSettings['img'] = imgDict
@@ -545,82 +520,82 @@ class ASGUI():
             ruleDictFromSettings['img'] = None
 
         # make text style
-        if self.window.generalGroupBox.isChecked():
+        if self.form.generalGroupBox.isChecked():
 
-            if self.window.enableBold.isChecked():
+            if self.form.enableBold.isChecked():
                 # make bold
                 boldDict = OrderedDict()
 
-                if self.window.boldBoldCBOX.isChecked():
+                if self.form.boldBoldCBOX.isChecked():
                     boldDict['font-weight'] = 'bold'
                 else:
                     boldDict['font-weight'] = 'normal'
 
-                if self.window.boldItalicBox.isChecked():
+                if self.form.boldItalicBox.isChecked():
                     boldDict['font-style'] = 'italic'
-                if self.window.boldUnderlinedBox.isChecked():
+                if self.form.boldUnderlinedBox.isChecked():
                     boldDict['text-decoration'] = 'underline'
-                if self.window.boldTextColor.text() != '':
-                    boldDict['color'] = self.window.boldTextColor.text()
+                if self.form.boldTextColor.text() != '':
+                    boldDict['color'] = self.form.boldTextColor.text()
 
                 ruleDictFromSettings['b'] = boldDict
             else:
                 ruleDictFromSettings['b'] = None
 
-            if self.window.enableItalics.isChecked():
+            if self.form.enableItalics.isChecked():
                 # make italics
                 italicsDict = OrderedDict()
 
-                if self.window.italicsBoldCBOX.isChecked():
+                if self.form.italicsBoldCBOX.isChecked():
                     italicsDict['font-weight'] = 'bold'
                 else:
                     italicsDict['font-weight'] = 'normal'
-                if self.window.italicsItalicBox.isChecked():
+                if self.form.italicsItalicBox.isChecked():
                     italicsDict['font-style'] = 'italic'
                 else:
                     italicsDict['font-style'] = 'normal'
-                if self.window.italicsUnderlinedBox.isChecked():
+                if self.form.italicsUnderlinedBox.isChecked():
                     italicsDict['text-decoration'] = 'underline'
                 else:
                     italicsDict['text-decoration'] = 'none'
-                if self.window.italicsTextColor.text() != '':
-                    italicsDict['color'] = self.window.italicsTextColor.text()
+                if self.form.italicsTextColor.text() != '':
+                    italicsDict['color'] = self.form.italicsTextColor.text()
 
                 ruleDictFromSettings['i'] = italicsDict
             else:
                 ruleDictFromSettings['i'] = None
 
-            if self.window.enableUnderlined.isChecked():
+            if self.form.enableUnderlined.isChecked():
                 # make underlined
                 underlinedDict = OrderedDict()
 
-                if self.window.underlinedBoldCBOX.isChecked():
+                if self.form.underlinedBoldCBOX.isChecked():
                     underlinedDict['font-weight'] = 'bold'
-                if self.window.underlinedItalicBox.isChecked():
+                if self.form.underlinedItalicBox.isChecked():
                     underlinedDict['font-style'] = 'italic'
-                if self.window.underlinedUnderlinedBox.isChecked():
+                if self.form.underlinedUnderlinedBox.isChecked():
                     underlinedDict['text-decoration'] = 'underline'
                 else:
                     underlinedDict['text-decoration'] = 'none'
-                if self.window.underlinedTextColor.text() != '':
-                    underlinedDict['color'] = self.window.underlinedTextColor.text()
+                if self.form.underlinedTextColor.text() != '':
+                    underlinedDict['color'] = self.form.underlinedTextColor.text()
 
                 ruleDictFromSettings['u'] = underlinedDict
             else:
                 ruleDictFromSettings['u'] = None
 
-            if self.window.enableLinks.isChecked():
+            if self.form.enableLinks.isChecked():
                 # make links
                 linksDict = OrderedDict()
 
-                if self.window.linksBoldCBOX.isChecked():
+                if self.form.linksBoldCBOX.isChecked():
                     linksDict['font-weight'] = 'bold'
-                if self.window.linksItalicBox.isChecked():
+                if self.form.linksItalicBox.isChecked():
                     linksDict['font-style'] = 'italic'
-                if self.window.linksUnderlinedBox.isChecked():
+                if self.form.linksUnderlinedBox.isChecked():
                     linksDict['text-decoration'] = 'underline'
-                if self.window.linksTextColor.text() != '':
-                    linksDict['color'] = self.window.linksTextColor.text()
+                if self.form.linksTextColor.text() != '':
+                    linksDict['color'] = self.form.linksTextColor.text()
 
                 ruleDictFromSettings['a'] = linksDict
             else:
@@ -697,7 +672,7 @@ class ASGUI():
             self.clayout.update_current_ordinal_and_redraw(self.clayout.ord)
 
     def addTimer(self):
-        duration = self.window.timerSpinBox.value()
+        duration = self.form.timerSpinBox.value()
         if duration != 0:
             timerText = r'''<!-- Timer Code Start-->
 <br>

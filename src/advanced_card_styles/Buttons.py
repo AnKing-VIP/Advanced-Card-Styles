@@ -242,8 +242,7 @@ class Buttons(QWidget):
 
     # launch advanced editor
     def advancedEditorButtonAction(self):
-        a = AdvancedStylerGui.ASGUI()
-        a.loadUI(self.clayout)
+        AdvancedStylerGui.ASGUI(self.clayout)
 
     @property
     def Saved(self):
