@@ -45,7 +45,7 @@ def getListOfItemsFromCssString(string, skip_whitespace_bool=False, skip_comment
 def convertRuleContentToOrderedDict(ruleContent):
     '''
     This function converts a single rule.content for a single rule, which is a list of declarations
-    into an actual dictionnary with key value data for css attributes.
+    into an actual dictionary with key value data for css attributes.
     '''
     orderdRule = OrderedDict()
     a = parse_declaration_list(
@@ -55,7 +55,7 @@ def convertRuleContentToOrderedDict(ruleContent):
         # print(dec)
         if dec.type == 'error':
             showInfo(dec.kind)
-            showInfo('Some kind of error in CSS code (Last correct item was : ' +
+            showInfo(f'Some kind of error in CSS code on line {dec.source_line} (Last correct item was : ' +
                      lastitem + ')\n' + dec.message)
         if dec.type == 'whitespace' or dec.type == 'comment':  # extra security
             continue
