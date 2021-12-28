@@ -2,8 +2,7 @@ import os
 from pathlib import Path
 from zipfile import ZipFile
 
-from PyQt5.QtGui import *
-from PyQt5.QtWidgets import *
+from aqt.qt import *
 
 dir_path = os.path.dirname(os.path.realpath(__file__))
 basepath = Path(dir_path) / 'user_files'

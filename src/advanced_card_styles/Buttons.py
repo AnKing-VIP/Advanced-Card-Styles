@@ -4,16 +4,12 @@ from functools import partial
 from pathlib import Path
 
 from aqt.clayout import CardLayout
-from PyQt5.Qt import *
-from PyQt5.QtCore import Qt
-from PyQt5.QtGui import *
-from PyQt5.QtWidgets import *
+from aqt.qt import *
 
 from . import AdvancedStylerGui, ProfileManager
 
 
 class Buttons(QWidget):
-
     def __init__(self, clayout: CardLayout):
         super().__init__()
         self.clayout = clayout
@@ -24,10 +20,10 @@ class Buttons(QWidget):
         advancedEditorButton = QPushButton("Advanced Editor")
         advancedEditorButton.setAutoDefault(False)
 
-        saveButton = QPushButton("Save Style") 
+        saveButton = QPushButton("Save Style")
         saveButton.setAutoDefault(False)
 
-        menuButton = QPushButton('...', self)
+        menuButton = QPushButton("...", self)
         menuButton.setFixedWidth(35)
         menuButton.setAutoDefault(False)
 
@@ -59,7 +55,8 @@ class Buttons(QWidget):
         advancedEditorButton.clicked.connect(self.advancedEditorButtonAction)
         saveButton.clicked.connect(self.getNameAndSave)
         profileComboBox.currentTextChanged.connect(
-            lambda: self.loadSelectedProfile(ask_user=True))
+            lambda: self.loadSelectedProfile(ask_user=True)
+        )
 
         self.setLayout(newLayout)
 
@@ -69,10 +66,10 @@ class Buttons(QWidget):
 
         nameWindow = self.nameWindow = QWidget()
         nameText = self.nameText = QLineEdit()
-        nameWindow.setWindowTitle('Profile Name')
+        nameWindow.setWindowTitle("Profile Name")
         nameWindow.setWindowIcon(self.clayout.windowIcon())
-        okButton = QPushButton('Save')
-        label = QLabel('Please select a profile name :')
+        okButton = QPushButton("Save")
+        label = QLabel("Please select a profile name :")
         vlayout = QVBoxLayout()
 
         labelLayout = QHBoxLayout()
@@ -87,24 +84,25 @@ class Buttons(QWidget):
         vlayout.addLayout(hlayout)
 
         nameWindow.setLayout(vlayout)
-        nameWindow.setWindowModality(Qt.ApplicationModal)
+        nameWindow.setWindowModality(Qt.WindowModality.ApplicationModal)
         nameWindow.show()
         nameText.setText(profilename)
         nameText.setFocus()
 
-        nameText.returnPressed.connect(
-            partial(self.saveProfile, self.nameText))
+        nameText.returnPressed.connect(partial(self.saveProfile, self.nameText))
         nameText.returnPressed.connect(nameWindow.close)
         okButton.clicked.connect(partial(self.saveProfile, self.nameText))
         okButton.clicked.connect(nameWindow.close)
 
     def saveProfile(self, nametxt, withFrontAndBack=True):
-        print('-' + nametxt.text() + '-')
+        print("-" + nametxt.text() + "-")
         cssTextWithConfigs = self.insertOrChangeConfigs(
-            self.clayout.model['css'], nametxt.text(), self.Saved)
+            self.clayout.model["css"], nametxt.text(), self.Saved
+        )
 
         ProfileManager.saveProfile(
-            nametxt.text(), cssTextWithConfigs, self.front, self.back)
+            nametxt.text(), cssTextWithConfigs, self.front, self.back
+        )
         self.updateComboBox(nametxt.text(), forceUpdate=True)
 
     def importAndUpdateProfile(self):
@@ -113,75 +111,86 @@ class Buttons(QWidget):
 
     def loadSelectedProfile(self, ask_user=False):
         dir_path = os.path.dirname(os.path.realpath(__file__))
-        basepath = Path(dir_path) / 'user_files' / \
-            self.profileComboBox.currentText()
+        basepath = Path(dir_path) / "user_files" / self.profileComboBox.currentText()
 
-        if (basepath / 'css.css').exists():
-            with open(str(basepath / 'css.css'), 'r') as file:
+        if (basepath / "css.css").exists():
+            with open(str(basepath / "css.css"), "r") as file:
                 css = file.read()
-                self.clayout.model['css'] = css
+                self.clayout.model["css"] = css
 
-        if (basepath / 'front.txt').exists() or (basepath / 'back.txt').exists():
+        if (basepath / "front.txt").exists() or (basepath / "back.txt").exists():
             if ask_user:
-                reply = QMessageBox.question(self, 'CAUTION', 'The selected profile has \'Front\' and/or \'Back\' templates.\
+                reply = QMessageBox.question(
+                    self,
+                    "CAUTION",
+                    "The selected profile has 'Front' and/or 'Back' templates.\
                                                     \nAre you sure you want to import them?\
                                                     \nPlease make sure you are choosing the CORRECT CARD TYPE (basic/cloze)\
                                                     \n(Only do this if you know what you are doing)\
                                                     \n\
                                                     \nYes = Import CSS + Front + Back\
-                                                    \nNo = Import CSS only.',
-                                                   QMessageBox.Yes, QMessageBox.No)
+                                                    \nNo = Import CSS only.",
+                    QMessageBox.Yes,
+                    QMessageBox.No,
+                )
 
             if not ask_user or reply == QMessageBox.Yes:
-                if (basepath / 'front.txt').exists():
-                    with open(str(basepath / 'front.txt'), 'r') as fileF:
+                if (basepath / "front.txt").exists():
+                    with open(str(basepath / "front.txt"), "r") as fileF:
                         self.front = fileF.read()
-                if (basepath / 'back.txt').exists():
-                    with open(str(basepath / 'back.txt'), 'r') as fileB:
+                if (basepath / "back.txt").exists():
+                    with open(str(basepath / "back.txt"), "r") as fileB:
                         self.back = fileB.read()
 
         self.clayout.change_tracker.mark_basic()
         self.clayout.update_current_ordinal_and_redraw(self.clayout.ord)
 
     def getCurrentProfileNameAndSaveStatus(self):
-        cssText = self.clayout.model['css']
+        cssText = self.clayout.model["css"]
 
         signalString = cssText[:11]
         profileConfigs = None
-        if signalString == '/* Profile:':
-            endOfNameIndex = cssText.find('*/')
+        if signalString == "/* Profile:":
+            endOfNameIndex = cssText.find("*/")
             if endOfNameIndex != -1:
-                profileConfigs = cssText[2:2 + endOfNameIndex]
+                profileConfigs = cssText[2 : 2 + endOfNameIndex]
 
-                configList = profileConfigs.split('||')
+                configList = profileConfigs.split("||")
 
-                profileName = configList[0].split(':')[1].strip()
-                saveStatus = configList[1].split(':')[1].strip()
+                profileName = configList[0].split(":")[1].strip()
+                saveStatus = configList[1].split(":")[1].strip()
 
                 return profileName, saveStatus
 
         else:
-            return 'Custom Profile', 'Not saved'
+            return "Custom Profile", "Not saved"
 
     # configs
     def insertOrChangeConfigs(self, cssText, profileName, saveStatus):
         signalString = cssText[:11]
-        if signalString == '/* Profile:':
-            endOfNameIndex = cssText.find('*/')
+        if signalString == "/* Profile:":
+            endOfNameIndex = cssText.find("*/")
             if endOfNameIndex != -1:
-                newCss = cssText[endOfNameIndex + 3:]
-                return '/* Profile: {} || Satus: {} */ \n'.format(profileName, saveStatus) + newCss
+                newCss = cssText[endOfNameIndex + 3 :]
+                return (
+                    "/* Profile: {} || Satus: {} */ \n".format(profileName, saveStatus)
+                    + newCss
+                )
 
         else:
-            return '/* Profile: {} || Satus: {} */ \n'.format(profileName, saveStatus) + cssText
+            return (
+                "/* Profile: {} || Satus: {} */ \n".format(profileName, saveStatus)
+                + cssText
+            )
 
     def getExportConfig(self):
         exportConfigWindow = self.exportConfigWindow = QWidget()
 
-        okButton = QPushButton('Export')
+        okButton = QPushButton("Export")
 
         includeAllCBox = self.includeAllCBox = QCheckBox(
-            'Include \'Front\' and \'Back\' html (USE WITH CAUTION!)')
+            "Include 'Front' and 'Back' html (USE WITH CAUTION!)"
+        )
 
         vlayout = QVBoxLayout()
         hlayout = QHBoxLayout()
@@ -191,12 +200,17 @@ class Buttons(QWidget):
         vlayout.addLayout(hlayout)
 
         exportConfigWindow.setLayout(vlayout)
-        exportConfigWindow.setWindowModality(Qt.ApplicationModal)
+        exportConfigWindow.setWindowModality(
+            Qt.WindowModality.ApplicationModal
+        )
         exportConfigWindow.show()
         exportConfigWindow.setFocus()
 
-        okButton.clicked.connect(partial(
-            ProfileManager.exportProfile, self.profileComboBox, self.includeAllCBox))
+        okButton.clicked.connect(
+            partial(
+                ProfileManager.exportProfile, self.profileComboBox, self.includeAllCBox
+            )
+        )
         okButton.clicked.connect(exportConfigWindow.close)
 
     # profile combobox
@@ -212,13 +226,13 @@ class Buttons(QWidget):
 
         if forceUpdate:
             self.loadSelectedProfile()
-            
+
     def loadProfilesIntoCombobox(self):
         available_profiles = ProfileManager.getAvailableProfiles()
-        
+
         # sort by text in brackets (e.g. [Cloze])
         def sort(x):
-            m = re.search('\[[a-zA-Z-_]+\]', x)
+            m = re.search("\[[a-zA-Z-_]+\]", x)
             if m:
                 return m.group(0) + x
             else:
@@ -230,19 +244,19 @@ class Buttons(QWidget):
     # reading / writing current template front and back
     @property
     def front(self):
-        return self.clayout.templates[self.clayout.ord]['qfmt']
+        return self.clayout.templates[self.clayout.ord]["qfmt"]
 
     @front.setter
     def front(self, value):
-        self.clayout.templates[self.clayout.ord]['qfmt'] = value
+        self.clayout.templates[self.clayout.ord]["qfmt"] = value
 
     @property
     def back(self):
-        return self.clayout.templates[self.clayout.ord]['afmt']
+        return self.clayout.templates[self.clayout.ord]["afmt"]
 
     @back.setter
     def back(self, value):
-        self.clayout.templates[self.clayout.ord]['afmt'] = value
+        self.clayout.templates[self.clayout.ord]["afmt"] = value
 
     # launch advanced editor
     def advancedEditorButtonAction(self):
@@ -250,8 +264,8 @@ class Buttons(QWidget):
 
     @property
     def Saved(self):
-        return 'Saved'
+        return "Saved"
 
     @property
     def NotSaved(self):
-        return 'Not Saved'
+        return "Not Saved"

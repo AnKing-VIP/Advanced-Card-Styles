@@ -1,10 +1,8 @@
 from functools import partial
 
-from aqt import clayout, mw
+from aqt import mw
+from aqt.qt import *
 from aqt.utils import showInfo
-from PyQt5.QtCore import Qt
-from PyQt5.QtGui import *
-from PyQt5.QtWidgets import *
 
 from . import AdvancedStylerUI
 from .CssProfile import *
@@ -18,7 +16,7 @@ from .myCssParser import *
 class ASGUI(QDialog):
 
     def __init__(self, clayout):
-        QDialog.__init__(self, clayout, Qt.Window)
+        QDialog.__init__(self, clayout, Qt.WindowType.Window)
         mw.setupDialogGC(self)
         self.mw = mw
         self.clayout = clayout
@@ -35,7 +33,7 @@ class ASGUI(QDialog):
     def loadUI(self):
         self.setWindowIcon(self.clayout.windowIcon())
 
-        self.setWindowModality(Qt.ApplicationModal)
+        self.setWindowModality(Qt.WindowModality.ApplicationModal)
 
         text = self.clayout.model['css']
         self.loadSettingsFromCss(text)

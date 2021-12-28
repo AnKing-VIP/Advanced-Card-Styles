@@ -1,6 +1,5 @@
 from aqt.gui_hooks import card_layout_will_show
-from PyQt5.QtGui import *
-from PyQt5.QtWidgets import *
+from aqt.qt import *
 
 from .Buttons import Buttons
 
